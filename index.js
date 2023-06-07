@@ -13,7 +13,7 @@ api.get("/", async (req, res) => {
 })
 
 api.post("/createTask", async (req, res) => {
-    let infos = req.body
+    let infos = req
     console.log(infos)
 
     return res.status(200).json({ body: req.body, resultado: "OKAAY" })
