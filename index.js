@@ -15,7 +15,7 @@ api.get("/", async (req, res) => {
 api.post("/createTask", async (req, res) => {
     console.log(req.body)
 
-    return res.status(200).json({ body: req.body, params: req.params })
+    return res.status(200).json({ body: req.body, resultado: "OKAAY" })
 })
 
 api.get("/pegar", async (req, res) => {
