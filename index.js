@@ -20,5 +20,5 @@ api.post("/createTask", async (req, res) => {
 })
 
 api.get("/pegar", async (req, res) => {
-    return res.status(200).json({ result: "Sucess" })
+    return res.status(200).json({ result: "Sucess NEWWW" })
 })
