@@ -32,12 +32,7 @@ api.get("/", async (req, res) => {
 api.post("/createTask", async (req, res) => {
     let response = req.body
 
-    let modelTask = mongoose.model("tasks", {
-        title: String,
-        description: String,
-        type: String,
-        date: Number,
-    })
+    let modelTask = mongoose.model("tasks")
 
     let newTask = {
         title: response.title,
