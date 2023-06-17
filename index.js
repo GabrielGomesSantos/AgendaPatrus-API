@@ -17,8 +17,10 @@ mongoose.connect(appData.api.databaseURL)
 
     })
     .catch((err) => {
+        console.log(err)
         console.log("❌ | MongoDB não foi conectada!")
         console.log("❌ | API não foi ligada devido a não conexão com banco de dados!")
+        return
     })
 
 
