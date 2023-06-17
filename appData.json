@@ -3,6 +3,6 @@
         "url": "https://agendapatrus-api.onrender.com",
         "databaseUsername": "ManagerAcess",
         "databasePassword": "eesps-acessDB",
-        "databaseURL": "mongodb+srv://ManagerAcess:eesps-acessDB@agenda-patrus.1mlmgsz.mongodb.net/"
+        "databaseURL": "mongodb+srv://ManagerAcess:eesps-acessDB@agenda-patrus.1mlmgsz.mongodb.net/cloud"
     }
 }
