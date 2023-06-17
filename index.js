@@ -2,9 +2,12 @@ const express = require("express")
 const axios = require("axios")
 const api = express()
 
+app.use(bodyParser.json());
+
 api.listen(4000, async () => {
     console.log("🟢 | API ligada com sucesso!")
 })
+
 
 // -------------------------------------------------------------
 
