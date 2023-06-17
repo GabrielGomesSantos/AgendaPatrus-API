@@ -25,19 +25,21 @@ mongoose.connect(appData.api.databaseURL)
 
 // -------------------------------------------------------------
 
+let modelTask = mongoose.model("Task", mongoose.Schema({
+    title: String,
+    description: String,
+    type: String,
+    date: Number,
+}))
+
+// -------------------------------------------------------------
+
 api.get("/", async (req, res) => {
     return res.status(200).json({ result: "Sucess" })
 })
 
 api.post("/createTask", async (req, res) => {
     let response = req.body
-
-    let modelTask = mongoose.model("Task", mongoose.Schema({
-        title: String,
-        description: String,
-        type: String,
-        date: Number,
-    }))
 
     let newTask = {
         title: response.title,
