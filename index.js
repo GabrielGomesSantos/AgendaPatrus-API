@@ -19,7 +19,12 @@ api.get("/", async (req, res) => {
 api.post("/createTask", async (req, res) => {
     let response = req.body
 
-    console.log("Simulando contato com banco de dados...")
+    function simulationDB() {
+        console.log("Simulando contato com banco de dados...")
+        return
+    }
+
+    simulationDB()
         .then(() => {
             let dataResp = {
                 form: response,
