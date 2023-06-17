@@ -17,7 +17,27 @@ api.get("/", async (req, res) => {
 })
 
 api.post("/createTask", async (req, res) => {
-    return res.status(200).json(req.body)
+    let response = req.body
+
+    console.log("Simulando contato com banco de dados...")
+        .then(() => {
+            let dataResp = {
+                form: response,
+                status: 200
+            }
+        
+            return res.status(200).json(dataResp)
+        })
+        .catch(err => {
+            let dataResp = {
+                form: response,
+                status: 400,
+                erro: err
+            }
+        
+            return res.status(400).json(dataResp)
+        })
+    
 })
 
 api.get("/pegar", async (req, res) => {
