@@ -32,7 +32,12 @@ api.get("/", async (req, res) => {
 api.post("/createTask", async (req, res) => {
     let response = req.body
 
-    let modelTask = mongoose.model("tasks")
+    let modelTask = mongoose.model("Task", mongoose.Schema({
+        title: String,
+        description: String,
+        type: String,
+        date: Number,
+    }))
 
     let newTask = {
         title: response.title,
@@ -41,7 +46,7 @@ api.post("/createTask", async (req, res) => {
         date: Date.now()
     }
 
-    modelTask.create(newTask)
+    new modelTask(newTask).save()
         .then(() => {
             let dataResp = {
                 form: newTask,
