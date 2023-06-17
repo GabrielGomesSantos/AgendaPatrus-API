@@ -18,9 +18,9 @@ api.get("/", async (req, res) => {
 
 api.post("/createTask", async (req, res) => {
     let infos = req
-    console.log(infos)
+    console.log({ body: req.body, data: req.data, resultado: "OKAAY" })
 
-    return res.status(200).json({ body: req.body, resultado: "OKAAY" })
+    return res.status(200).json({ body: req.body, data: req.data, resultado: "OKAAY" })
 })
 
 api.get("/pegar", async (req, res) => {
