@@ -33,17 +33,24 @@ api.get("/", async (req, res) => {
 api.post("/createTask", async (req, res) => {
     let response = req.body
 
+    let modelTask = mongoose.model("tasks", {
+        title: String,
+        description: String,
+        type: String,
+        date: Number,
+    })
 
-
-    function simulationDB() {
-        console.log("Simulando contato com banco de dados...")
-        return
+    let newTask = {
+        title: response.title,
+        description: response.description,
+        type: response.type,
+        date: Date.now()
     }
 
-    simulationDB()
+    modelTask.create(newTask)
         .then(() => {
             let dataResp = {
-                form: response,
+                form: newTask,
                 status: 200
             }
 
