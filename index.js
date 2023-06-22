@@ -45,7 +45,7 @@ api.post("/createTask", async (req, res) => {
         title: response.title,
         description: response.description,
         type: response.type,
-        date: Date.now()
+        date: response.date
     }
 
     new modelTask(newTask).save()
