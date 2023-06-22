@@ -71,8 +71,7 @@ api.post("/createTask", async (req, res) => {
 
 api.get("/all", async (req, res) => {
     let items = await modelTask.find()
-    console.log(items)
-
+    
     return res.status(200).json(items)
 })
 
