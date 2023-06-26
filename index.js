@@ -58,7 +58,7 @@ mongoose.connect(appData.api.databaseURL)
                                 if (score > 3) {
                                     let newCount = tasksCount-3
                                     console.log(`${tasksCount} - 3 = ${newCount}`)
-                                    text = text + `E ${newCount > 1 ? "outras" : "outra"} ${tasksCount-3} ${newCount > 1 ? "tarefas" : "tarefa"}...`
+                                    text = text + `E ${newCount > 1 ? "outras" : "outra"} ${newCount} ${newCount > 1 ? "tarefas" : "tarefa"}...`
                                 } else {
                                     text = text + `${score}. ${item.title};\n`
                                 }
