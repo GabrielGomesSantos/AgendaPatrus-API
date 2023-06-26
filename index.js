@@ -13,6 +13,85 @@ mongoose.connect(appData.api.databaseURL)
         console.log("🟢 | MongoDB conectada com sucesso!")
         api.listen(4000, async () => {
             console.log("🟢 | API ligada com sucesso!")
+
+
+            setTimeout(async () => {
+
+                
+
+                async function sendNotification(dataPush) {
+                    let headers = {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Basic OWQwNzJmNDMtZmU1NC00MjIwLWE4M2EtMWY1ZWMxMDE4NWUw',
+                    }
+
+                    await axios.post("https://onesignal.com/api/v1/notifications", dataPush, { headers })
+                    .then(response => {
+                        console.log('Notificação enviada com sucesso:', response.data)
+                    })
+                    .catch(error => {
+                        console.error('Erro ao enviar a notificação:', error)
+                    })
+                }
+
+                
+
+                let items = await modelTask.find()
+                items.map((item) => {
+                    let dias = Math.ceil((item.date - Date.now()) / (24 * 60 * 60 * 1000))
+
+                    if (dias === 0) {
+                        const dataPush = {
+                            app_id: appData.onesginal.appId,
+                            included_segments: ['All'],
+                            headings: { 'en': `Tarefas para hoje` },
+                            contents: { 'en': `Várias` },
+                        }
+
+                        sendNotification(dataPush)
+
+                    }
+
+                    if (dias === 3) {
+                        const dataPush = {
+                            app_id: appData.onesginal.appId,
+                            included_segments: ['All'],
+                            headings: { 'en': `${item.type} para ${item.type === "Prova" ? "estudar" : "fazer"}!` },
+                            contents: { 'en': `${item.name} - Em ${dias} dias` },
+                            buttons: [{
+                                id: "feito",
+                                text: "Feito!"
+                            }]
+                        }
+
+                        sendNotification(dataPush)
+
+                    }
+
+                    if (dias === 7) {
+                        const dataPush = {
+                            app_id: appData.onesginal.appId,
+                            included_segments: ['All'],
+                            headings: { 'en': `${item.type} para ${item.type === "Prova" ? "estudar" : "fazer"}!` },
+                            contents: { 'en': `${item.name} - Em ${dias} dias` },
+                            buttons: [{
+                                id: "feito",
+                                text: "Feito!"
+                            }]
+                        }
+
+                        sendNotification(dataPush)
+
+                    }
+
+                    if (dias === 0) hoje.push(item)
+                    if (dias >= 1 && dias <= 7) semana.push(item)
+                    if (dias >= 8) depois.push(item)
+                })
+
+            }, 30000)
+
+
         })
 
     })
@@ -25,7 +104,7 @@ mongoose.connect(appData.api.databaseURL)
 
 // -------------------------------------------------------------
 
-let modelTask = mongoose.model("Task", mongoose.Schema({
+var modelTask = mongoose.model("Task", mongoose.Schema({
     title: String,
     description: String,
     type: String,
@@ -71,7 +150,7 @@ api.post("/createTask", async (req, res) => {
 
 api.get("/all", async (req, res) => {
     let items = await modelTask.find()
-    
+
     return res.status(200).json(items)
 })
 
