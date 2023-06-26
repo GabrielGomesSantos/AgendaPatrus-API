@@ -42,7 +42,6 @@ mongoose.connect(appData.api.databaseURL)
                     let day = Math.floor(days)
 
                     let dayInDatabase = await modelLogAlerts.findOne()
-                    console.log(dayInDatabase)
                     if (!dayInDatabase) dayInDatabase = { day: day - 1 }
                     if (day > dayInDatabase.day) {
                         let text = ""
@@ -67,7 +66,7 @@ mongoose.connect(appData.api.databaseURL)
                         const dataPush = {
                             app_id: appData.onesginal.appId,
                             included_segments: ['All'],
-                            headings: { 'en': `Tarefas para hoje` },
+                            headings: { 'en': `🗓️ Tarefas para hoje` },
                             contents: { 'en': text },
                         }
 
@@ -75,6 +74,7 @@ mongoose.connect(appData.api.databaseURL)
                         let dataUpdateDay = { day }
 
                         if (!dayInDatabase) {
+                            console.log('PASSANDO POR CRIAR')
                             new modelLogAlerts(dataUpdateDay).save()
                                 .then(() => {
                                     let dataResp = {
@@ -93,7 +93,10 @@ mongoose.connect(appData.api.databaseURL)
 
                                     return res.status(400).json(dataResp)
                                 })
-                        } else {
+                        }
+                        
+                        if(dayInDatabase) {
+                            console.log('PASSANDO POR ATUALIZAR')
                             dayInDatabase.day = day
                             dayInDatabase.save()
                             .then(() => {
