@@ -31,7 +31,7 @@ mongoose.connect(appData.api.databaseURL)
                             console.error('Erro ao enviar a notificação:', error)
                         })
                 }
-                
+
                 let items = await modelTask.find()
                 let dateNow = new Date()
 
@@ -43,7 +43,9 @@ mongoose.connect(appData.api.databaseURL)
 
                     let dayInDatabase = await modelLogAlerts.findOne()
                     if (!dayInDatabase) dayInDatabase = { day: day - 1 }
+
                     if (day > dayInDatabase.day) {
+                        console.log("Avisando sobre as tarefas de hoje---")
                         let text = ""
                         let score = 0
                         let tasksCount = 0
@@ -51,15 +53,15 @@ mongoose.connect(appData.api.databaseURL)
                         items.map((item) => {
                             let dias = Math.ceil((item.date - Date.now()) / (24 * 60 * 60 * 1000))
 
-                            if(dias === 0) {
+                            if (dias === 0) {
                                 score++
                                 tasksCount++
-                                if(score > 3) {
-                                    text = text+`E ${tasksCount > 1 ? "outras" : "outra"} ${tasksCount} ${tasksCount > 1 ? "tarefas" : "tarefa"}...`
+                                if (score > 3) {
+                                    text = text + `E ${tasksCount > 1 ? "outras" : "outra"} ${tasksCount} ${tasksCount > 1 ? "tarefas" : "tarefa"}...`
                                 } else {
-                                    text = text+`${score}. ${item.title};\n`
+                                    text = text + `${score}. ${item.title};\n`
                                 }
-                                
+
                             }
                         })
 
@@ -73,32 +75,8 @@ mongoose.connect(appData.api.databaseURL)
                         sendNotification(dataPush)
                         let dataUpdateDay = { day }
 
-                        if (!dayInDatabase) {
-                            console.log('PASSANDO POR CRIAR')
-                            new modelLogAlerts(dataUpdateDay).save()
-                                .then(() => {
-                                    let dataResp = {
-                                        day,
-                                        status: 200
-                                    }
-
-                                    return res.status(200).json(dataResp)
-                                })
-                                .catch(err => {
-                                    let dataResp = {
-                                        day,
-                                        status: 400,
-                                        erro: err
-                                    }
-
-                                    return res.status(400).json(dataResp)
-                                })
-                        }
-                        
-                        if(dayInDatabase) {
-                            console.log('PASSANDO POR ATUALIZAR')
-                            dayInDatabase.day = day
-                            dayInDatabase.save()
+                        dayInDatabase.day = day
+                        dayInDatabase.save()
                             .then(() => {
                                 let dataResp = {
                                     day,
@@ -116,46 +94,48 @@ mongoose.connect(appData.api.databaseURL)
 
                                 return res.status(400).json(dataResp)
                             })
-                        }
 
+
+                    } else {
+                        console.log("Já foi avisado hoje!")
                     }
                 }
 
                 items.map((item) => {
                     let dias = Math.ceil((item.date - Date.now()) / (24 * 60 * 60 * 1000))
-/*
-                    if (dias === 3) {
-                        const dataPush = {
-                            app_id: appData.onesginal.appId,
-                            included_segments: ['All'],
-                            headings: { 'en': `${item.type} para ${item.type === "Prova" ? "estudar" : "fazer"}!` },
-                            contents: { 'en': `${item.title} - Em ${dias} dias` },
-                            buttons: [{
-                                id: "feito",
-                                text: "Feito!"
-                            }]
-                        }
-
-                        sendNotification(dataPush)
-
-                    }
-
-                    if (dias === 7) {
-                        const dataPush = {
-                            app_id: appData.onesginal.appId,
-                            included_segments: ['All'],
-                            headings: { 'en': `${item.type} para ${item.type === "Prova" ? "estudar" : "fazer"}!` },
-                            contents: { 'en': `${item.title} - Em ${dias} dias` },
-                            buttons: [{
-                                id: "feito",
-                                text: "Feito!"
-                            }]
-                        }
-
-                        sendNotification(dataPush)
-
-                    }
-*/
+                    /*
+                                        if (dias === 3) {
+                                            const dataPush = {
+                                                app_id: appData.onesginal.appId,
+                                                included_segments: ['All'],
+                                                headings: { 'en': `${item.type} para ${item.type === "Prova" ? "estudar" : "fazer"}!` },
+                                                contents: { 'en': `${item.title} - Em ${dias} dias` },
+                                                buttons: [{
+                                                    id: "feito",
+                                                    text: "Feito!"
+                                                }]
+                                            }
+                    
+                                            sendNotification(dataPush)
+                    
+                                        }
+                    
+                                        if (dias === 7) {
+                                            const dataPush = {
+                                                app_id: appData.onesginal.appId,
+                                                included_segments: ['All'],
+                                                headings: { 'en': `${item.type} para ${item.type === "Prova" ? "estudar" : "fazer"}!` },
+                                                contents: { 'en': `${item.title} - Em ${dias} dias` },
+                                                buttons: [{
+                                                    id: "feito",
+                                                    text: "Feito!"
+                                                }]
+                                            }
+                    
+                                            sendNotification(dataPush)
+                    
+                                        }
+                    */
                 })
 
             }, 30000)
