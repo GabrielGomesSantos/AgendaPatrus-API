@@ -17,8 +17,6 @@ mongoose.connect(appData.api.databaseURL)
 
             setTimeout(async () => {
 
-                
-
                 async function sendNotification(dataPush) {
                     let headers = {
                         'Content-Type': 'application/json',
@@ -34,7 +32,7 @@ mongoose.connect(appData.api.databaseURL)
                     })
                 }
 
-                
+                //if(new Date().getHours())
 
                 let items = await modelTask.find()
                 items.map((item) => {
@@ -84,9 +82,6 @@ mongoose.connect(appData.api.databaseURL)
 
                     }
 
-                    if (dias === 0) hoje.push(item)
-                    if (dias >= 1 && dias <= 7) semana.push(item)
-                    if (dias >= 8) depois.push(item)
                 })
 
             }, 30000)
