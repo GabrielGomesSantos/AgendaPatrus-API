@@ -57,7 +57,7 @@ mongoose.connect(appData.api.databaseURL)
                             app_id: appData.onesginal.appId,
                             included_segments: ['All'],
                             headings: { 'en': `${item.type} para ${item.type === "Prova" ? "estudar" : "fazer"}!` },
-                            contents: { 'en': `${item.name} - Em ${dias} dias` },
+                            contents: { 'en': `${item.title} - Em ${dias} dias` },
                             buttons: [{
                                 id: "feito",
                                 text: "Feito!"
@@ -73,7 +73,7 @@ mongoose.connect(appData.api.databaseURL)
                             app_id: appData.onesginal.appId,
                             included_segments: ['All'],
                             headings: { 'en': `${item.type} para ${item.type === "Prova" ? "estudar" : "fazer"}!` },
-                            contents: { 'en': `${item.name} - Em ${dias} dias` },
+                            contents: { 'en': `${item.title} - Em ${dias} dias` },
                             buttons: [{
                                 id: "feito",
                                 text: "Feito!"
