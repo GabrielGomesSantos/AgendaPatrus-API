@@ -56,7 +56,7 @@ mongoose.connect(appData.api.databaseURL)
                                 score++
                                 tasksCount++
                                 if (score > 3) {
-                                    text = text + `E ${tasksCount > 1 ? "outras" : "outra"} ${tasksCount} ${tasksCount > 1 ? "tarefas" : "tarefa"}...`
+                                    text = text + `E ${(tasksCount-3) > 1 ? "outras" : "outra"} ${tasksCount} ${(tasksCount-3) > 1 ? "tarefas" : "tarefa"}...`
                                 } else {
                                     text = text + `${score}. ${item.title};\n`
                                 }
