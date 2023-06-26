@@ -36,7 +36,7 @@ mongoose.connect(appData.api.databaseURL)
                 let dateNow = new Date()
 
                 console.log(`HORAS DE AGORA: ${dateNow.getHours()}`)
-                if (dateNow.getHours() === 18) {
+                if (dateNow.getHours() === 21) { // 7 | UTC+3
                     const milliseconds = Date.now()
                     const days = milliseconds / (24 * 60 * 60 * 1000)
                     let day = Math.floor(days)
