@@ -4,5 +4,8 @@
         "databaseUsername": "ManagerAcess",
         "databasePassword": "eesps-acessDB",
         "databaseURL": "mongodb+srv://ManagerAcess:eesps-acessDB@agenda-patrus.1mlmgsz.mongodb.net/cloud"
+    },
+    "onesginal": {
+        "appId": "77ccab24-25fe-4f73-bd64-71bb867d9147"
     }
 }

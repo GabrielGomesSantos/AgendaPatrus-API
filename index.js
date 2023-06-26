@@ -30,9 +30,11 @@ mongoose.connect(appData.api.databaseURL)
                     .catch(error => {
                         console.error('Erro ao enviar a notificação:', error)
                     })
-                }
+                }let dateNow = new Date()
 
-                //if(new Date().getHours())
+                if(dateNow.getHours() === 6) {
+                    
+                }
 
                 let items = await modelTask.find()
                 items.map((item) => {
