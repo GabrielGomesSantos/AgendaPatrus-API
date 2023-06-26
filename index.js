@@ -55,17 +55,16 @@ mongoose.connect(appData.api.databaseURL)
                             if (dias === 0) {
                                 score++
                                 tasksCount++
-                                if (score === 4) {
-                                    let newCount = tasksCount-3
-                                    text = text + `E ${newCount > 1 ? "outras" : "outra"} ${newCount} ${newCount > 1 ? "tarefas" : "tarefa"}...`
-                                } else {
-                                    if(score < 4) {
-                                        text = text + `${score}. ${item.title};\n`
-                                    }
+                                if (score < 4) {
+                                    text = text + `${score}. ${item.title};\n`
                                 }
 
                             }
                         })
+
+                        let newCount = tasksCount - 3
+                        text = text + `E ${newCount > 1 ? "outras" : "outra"} ${newCount} ${newCount > 1 ? "tarefas" : "tarefa"}...`
+
 
                         const dataPush = {
                             app_id: appData.onesginal.appId,
