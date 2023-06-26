@@ -63,9 +63,10 @@ mongoose.connect(appData.api.databaseURL)
                             }
                         })
 
+                        if(tasksCount > 3) {
                         let newCount = tasksCount - 3
                         text = text + `E ${newCount > 1 ? "outras" : "outra"} ${newCount} ${newCount > 1 ? "tarefas" : "tarefa"}...`
-
+                    }
 
                         const dataPush = {
                             app_id: appData.onesginal.appId,
