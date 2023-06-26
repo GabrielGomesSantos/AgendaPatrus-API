@@ -91,7 +91,7 @@ mongoose.connect(appData.api.databaseURL)
                                     erro: err
                                 }
 
-                                return res.status(400).json(dataResp)
+                                return console.log(dataResp)
                             })
 
 
