@@ -96,6 +96,26 @@ mongoose.connect(appData.api.databaseURL)
                         }
                         
                         if(dayInDatabase) {
+                            console.log('PASSANDO POR CRIAR')
+                            new modelLogAlerts(dataUpdateDay).save()
+                                .then(() => {
+                                    let dataResp = {
+                                        day,
+                                        status: 200
+                                    }
+
+                                    return res.status(200).json(dataResp)
+                                })
+                                .catch(err => {
+                                    let dataResp = {
+                                        day,
+                                        status: 400,
+                                        erro: err
+                                    }
+
+                                    return res.status(400).json(dataResp)
+                                })
+                                
                             console.log('PASSANDO POR ATUALIZAR')
                             dayInDatabase.day = day
                             dayInDatabase.save()
