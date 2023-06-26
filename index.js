@@ -53,6 +53,7 @@ mongoose.connect(appData.api.databaseURL)
                             let dias = Math.ceil((item.date - Date.now()) / (24 * 60 * 60 * 1000))
 
                             if (dias === 0) {
+                                console.log(tasksCount, item)
                                 score++
                                 tasksCount++
                                 if (score < 4) {
