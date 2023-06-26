@@ -15,7 +15,7 @@ mongoose.connect(appData.api.databaseURL)
             console.log("🟢 | API ligada com sucesso!")
 
 
-            setTimeout(async () => {
+            setInterval(async () => {
 
                 async function sendNotification(dataPush) {
                     let headers = {
@@ -24,34 +24,102 @@ mongoose.connect(appData.api.databaseURL)
                     }
 
                     await axios.post("https://onesignal.com/api/v1/notifications", dataPush, { headers })
-                    .then(response => {
-                        console.log('Notificação enviada com sucesso:', response.data)
-                    })
-                    .catch(error => {
-                        console.error('Erro ao enviar a notificação:', error)
-                    })
-                }let dateNow = new Date()
-
-                if(dateNow.getHours() === 6) {
-                    
+                        .then(response => {
+                            console.log('Notificação enviada com sucesso:', response.data)
+                        })
+                        .catch(error => {
+                            console.error('Erro ao enviar a notificação:', error)
+                        })
                 }
-
+                
                 let items = await modelTask.find()
-                items.map((item) => {
-                    let dias = Math.ceil((item.date - Date.now()) / (24 * 60 * 60 * 1000))
+                let dateNow = new Date()
 
-                    if (dias === 0) {
+                console.log(`HORAS DE AGORA: ${dateNow.getHours()}`)
+                if (dateNow.getHours() === 18) {
+                    const milliseconds = Date.now()
+                    const days = milliseconds / (24 * 60 * 60 * 1000)
+                    let day = Math.floor(days)
+
+                    let dayInDatabase = await modelLogAlerts.findOne()
+                    if (!dayInDatabase) dayInDatabase = { day: day - 1 }
+                    if (day > dayInDatabase.day) {
+                        let text = ""
+                        let score = 0
+                        let tasksCount = 0
+
+                        items.map((item) => {
+                            let dias = Math.ceil((item.date - Date.now()) / (24 * 60 * 60 * 1000))
+
+                            if(dias === 0) {
+                                score++
+                                tasksCount++
+                                if(score > 3) {
+                                    text = text+`E ${tasksCount > 1 ? "outras" : "outra"} ${tasksCount} ${tasksCount > 1 ? "tarefas" : "tarefa"}...`
+                                } else {
+                                    text = text+`${score}. ${item.title};\n`
+                                }
+                                
+                            }
+                        })
+
                         const dataPush = {
                             app_id: appData.onesginal.appId,
                             included_segments: ['All'],
                             headings: { 'en': `Tarefas para hoje` },
-                            contents: { 'en': `Várias` },
+                            contents: { 'en': text },
                         }
 
                         sendNotification(dataPush)
+                        let dataUpdateDay = { day }
+
+                        if (!dayInDatabase) {
+                            new modelLogAlerts(dataUpdateDay).save()
+                                .then(() => {
+                                    let dataResp = {
+                                        day,
+                                        status: 200
+                                    }
+
+                                    return res.status(200).json(dataResp)
+                                })
+                                .catch(err => {
+                                    let dataResp = {
+                                        day,
+                                        status: 400,
+                                        erro: err
+                                    }
+
+                                    return res.status(400).json(dataResp)
+                                })
+                        } else {
+                            dayInDatabase.day = day
+                            dayInDatabase.save()
+                            .then(() => {
+                                let dataResp = {
+                                    day,
+                                    status: 200
+                                }
+
+                                return res.status(200).json(dataResp)
+                            })
+                            .catch(err => {
+                                let dataResp = {
+                                    day,
+                                    status: 400,
+                                    erro: err
+                                }
+
+                                return res.status(400).json(dataResp)
+                            })
+                        }
 
                     }
+                }
 
+                items.map((item) => {
+                    let dias = Math.ceil((item.date - Date.now()) / (24 * 60 * 60 * 1000))
+/*
                     if (dias === 3) {
                         const dataPush = {
                             app_id: appData.onesginal.appId,
@@ -83,7 +151,7 @@ mongoose.connect(appData.api.databaseURL)
                         sendNotification(dataPush)
 
                     }
-
+*/
                 })
 
             }, 30000)
@@ -106,6 +174,10 @@ var modelTask = mongoose.model("Task", mongoose.Schema({
     description: String,
     type: String,
     date: Number,
+}))
+
+var modelLogAlerts = mongoose.model("LogAlert", mongoose.Schema({
+    day: Number
 }))
 
 // -------------------------------------------------------------
