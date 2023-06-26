@@ -35,7 +35,7 @@ mongoose.connect(appData.api.databaseURL)
                 let items = await modelTask.find()
                 let dateNow = new Date()
 
-                if (dateNow.getHours() === 21) { // 7 | UTC+3
+                if (dateNow.getHours() === 22) { // 7 | UTC+3
                     const milliseconds = Date.now()
                     const days = milliseconds / (24 * 60 * 60 * 1000)
                     let day = Math.floor(days)
@@ -82,7 +82,7 @@ mongoose.connect(appData.api.databaseURL)
                                     status: 200
                                 }
 
-                                return res.status(200).json(dataResp)
+                                console.log(dataResp)
                             })
                             .catch(err => {
                                 let dataResp = {
