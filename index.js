@@ -35,7 +35,7 @@ mongoose.connect(appData.api.databaseURL)
                 let items = await modelTask.find()
                 let dateNow = new Date()
 
-                if (dateNow.getHours() === 22) { // 7 | UTC+3
+                if (dateNow.getHours() === 7) { // 7 | UTC+3
                     const milliseconds = Date.now()
                     const days = milliseconds / (24 * 60 * 60 * 1000)
                     let day = Math.floor(days)
@@ -53,7 +53,6 @@ mongoose.connect(appData.api.databaseURL)
                             let dias = Math.ceil((item.date - Date.now()) / (24 * 60 * 60 * 1000))
 
                             if (dias === 0) {
-                                console.log(tasksCount, item)
                                 score++
                                 tasksCount++
                                 if (score < 4) {
@@ -104,9 +103,10 @@ mongoose.connect(appData.api.databaseURL)
                     }
                 }
 
+                /*
                 items.map((item) => {
                     let dias = Math.ceil((item.date - Date.now()) / (24 * 60 * 60 * 1000))
-                    /*
+                    
                                         if (dias === 3) {
                                             const dataPush = {
                                                 app_id: appData.onesginal.appId,
@@ -138,10 +138,10 @@ mongoose.connect(appData.api.databaseURL)
                                             sendNotification(dataPush)
                     
                                         }
-                    */
+                    
                 })
-
-            }, 30000)
+*/
+            }, 50000)
 
 
         })
@@ -149,7 +149,7 @@ mongoose.connect(appData.api.databaseURL)
     })
     .catch((err) => {
         console.log(err)
-        console.log("❌ | MongoDB não foi conectadaaa!")
+        console.log("❌ | MongoDB não foi conectado!")
         console.log("❌ | API não foi ligada devido a não conexão com banco de dados!")
     })
 
