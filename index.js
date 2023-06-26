@@ -42,6 +42,7 @@ mongoose.connect(appData.api.databaseURL)
                     let day = Math.floor(days)
 
                     let dayInDatabase = await modelLogAlerts.findOne()
+                    console.log(dayInDatabase)
                     if (!dayInDatabase) dayInDatabase = { day: day - 1 }
                     if (day > dayInDatabase.day) {
                         let text = ""
