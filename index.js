@@ -13,10 +13,11 @@ mongoose.connect(appData.api.databaseURL)
         console.log("🟢 | MongoDB conectada com sucesso!")
         api.listen(4000, async () => {
             console.log("🟢 | API ligada com sucesso!")
-
+        
+            console.log("PAROU 1")
 
             setInterval(async () => {
-
+                console.log("PAROU 2")
                 async function sendNotification(dataPush) {
                     let headers = {
                         'Content-Type': 'application/json',
@@ -34,8 +35,9 @@ mongoose.connect(appData.api.databaseURL)
 
                 let items = await modelTask.find()
                 let dateNow = new Date()
-
+                console.log("PAROU 3")
                 if (dateNow.getHours() === 7) { // 7 | UTC+3
+                    console.log("PAROU 4")
                     const milliseconds = Date.now()
                     const days = milliseconds / (24 * 60 * 60 * 1000)
                     let day = Math.floor(days)
