@@ -13,7 +13,7 @@ mongoose.connect(appData.api.databaseURL)
         console.log("🟢 | MongoDB conectada com sucesso!")
         api.listen(4000, async () => {
             console.log("🟢 | API ligada com sucesso!")
-        
+
             console.log("PAROU 1")
 
             setInterval(async () => {
@@ -64,10 +64,10 @@ mongoose.connect(appData.api.databaseURL)
                             }
                         })
 
-                        if(tasksCount > 3) {
-                        let newCount = tasksCount - 3
-                        text = text + `E ${newCount > 1 ? "outras" : "outra"} ${newCount} ${newCount > 1 ? "tarefas" : "tarefa"}...`
-                    }
+                        if (tasksCount > 3) {
+                            let newCount = tasksCount - 3
+                            text = text + `E ${newCount > 1 ? "outras" : "outra"} ${newCount} ${newCount > 1 ? "tarefas" : "tarefa"}...`
+                        }
 
                         const dataPush = {
                             app_id: appData.onesginal.appId,
@@ -169,6 +169,12 @@ var modelLogAlerts = mongoose.model("LogAlert", mongoose.Schema({
     day: Number
 }))
 
+var modelUsers = mongoose.model("User", mongoose.Schema({
+    fullname: String,
+    email: String,
+    password: String,
+}))
+
 // -------------------------------------------------------------
 
 api.get("/", async (req, res) => {
@@ -212,6 +218,52 @@ api.get("/all", async (req, res) => {
     return res.status(200).json(items)
 })
 
-api.get("/pegar", async (req, res) => {
-    return res.status(200).json({ result: "Sucess NEWWW" })
+// |||||====||||| usuarios |||||====|||||
+api.get("/users", async (req, res) => {
+    let userData = req.body
+    let userFind = await modelUsers.findOne((user) => user.fullname === userData.fullname || user.email === userData.email)
+    console.log(userFind)
+
+    if (userFind) {
+        return res.json(200).json({
+            permission: false,
+            userExisting: userFind
+        })
+    }
+
+    return res.json(200).json({
+        permission: true
+    })
+})
+
+api.post("/users", async (req, res) => {
+    let userData = req.body
+    let userFind = await modelUsers.findOne((user) => user.fullname === userData.fullname || user.email === userData.email)
+    console.log(userFind)
+
+    if (userFind) {
+        return res.json(409).json({
+            code: 409,
+            message: "Uma conta já criada utiliza esse email ou senha."
+        })
+    }
+
+    new modelUsers(userData).save()
+        .then(() => {
+            let dataResp = {
+                form: userData,
+                status: 200
+            }
+
+            return res.status(200).json(dataResp)
+        })
+        .catch(err => {
+            let dataResp = {
+                form: userData,
+                status: 400,
+                erro: err
+            }
+
+            return res.status(400).json(dataResp)
+        })
 })
