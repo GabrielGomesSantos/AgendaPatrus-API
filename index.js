@@ -238,7 +238,12 @@ api.get("/users", async (req, res) => {
 
 api.post("/users", async (req, res) => {
     let userData = req.body
-    let usersFind = await modelUsers.find((user) => user.fullname === userData.fullname || user.email === userData.email)
+    const usersFind = await modelUsers.find({
+        $or: [
+            { fullname: userData.fullname },
+            { email: userData.email }
+        ]
+    });
     let userFind = usersFind[0] || null
     console.log(userFind)
 
