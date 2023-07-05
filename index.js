@@ -238,7 +238,8 @@ api.get("/users", async (req, res) => {
 
 api.post("/users", async (req, res) => {
     let userData = req.body
-    let userFind = await modelUsers.findOne((user) => user.fullname === userData.fullname || user.email === userData.email)
+    let usersFind = await modelUsers.find((user) => user.fullname === userData.fullname || user.email === userData.email)
+    let userFind = usersFind[0] || null
     console.log(userFind)
 
     if (userFind) {
