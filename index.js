@@ -249,6 +249,40 @@ api.get("/users/verify", async (req, res) => {
     
 })
 
+api.get("/users", async (req, res) => {
+    let userData = req.body
+
+    let valor = ""
+    valor = userData.email ? "email" : valor
+    valor = userData.fullname ? "fullname" : valor
+    valor = userData.password ? "password" : valor
+
+    if(!valor) {
+        return res.json({message: "Nenhum valor foi passado para buscar."})
+    }
+
+    if(valor === "fullname") {
+        let userSearch = await modelUsers.findOne({ email: userData.email })
+        console.log(userSearch)
+    }
+
+    if(valor === "email") {
+
+    }
+
+    if(valor === "password") {
+
+    }
+
+    let usersFind = await modelUsers.find
+    let userFind = usersFind[0] || null
+
+    return res.status(200).json({
+        permission: false,
+        userExisting: userFind
+    })
+})
+
 api.post("/users", async (req, res) => {
     let userData = req.body
     let usersFind = await modelUsers.find({
