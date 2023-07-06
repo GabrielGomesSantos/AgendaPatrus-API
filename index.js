@@ -251,6 +251,7 @@ api.get("/users/verify", async (req, res) => {
 
 api.get("/users", async (req, res) => {
     let userData = req.body
+    console.log(userData)
 
     if(userData.fullname) {
         let userSearch = await modelUsers.findOne({ fullname: userData.fullname })
