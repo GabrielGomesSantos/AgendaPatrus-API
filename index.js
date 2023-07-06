@@ -221,6 +221,7 @@ api.get("/all", async (req, res) => {
 // |||||====||||| usuarios |||||====|||||
 api.get("/users/verify", async (req, res) => {
     let userData = req.body
+    console.log(userData)
 
     if(!userData) {
         return res.status(400).json({message: "Nenhum dado para busca foi passado."})
@@ -233,7 +234,7 @@ api.get("/users/verify", async (req, res) => {
         ]
     });
     let userFind = usersFind[0] || null
-    console.log(userFind)
+    //console.log(userFind)
 
     if (userFind) {
         return res.status(200).json({
