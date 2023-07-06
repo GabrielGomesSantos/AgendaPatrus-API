@@ -255,7 +255,6 @@ api.get("/users", async (req, res) => {
     let valor = ""
     valor = userData.email ? "email" : valor
     valor = userData.fullname ? "fullname" : valor
-    valor = userData.password ? "password" : valor
 
     if(!valor) {
         return res.json({message: "Nenhum valor foi passado para buscar."})
@@ -263,24 +262,15 @@ api.get("/users", async (req, res) => {
 
     if(valor === "fullname") {
         let userSearch = await modelUsers.findOne({ fullname: userData.fullname })
-        console.log(userSearch)
+        return res.status(200).json(userSearch)
     }
 
     if(valor === "email") {
-
+        let userSearch = await modelUsers.findOne({ fullname: userData.fullname })
+        return res.status(200).json(userSearch)
     }
 
-    if(valor === "password") {
-
-    }
-
-    let usersFind = await modelUsers.find
-    let userFind = usersFind[0] || null
-
-    return res.status(200).json({
-        permission: false,
-        userExisting: userFind
-    })
+    return res.status(400).json({ message: "Nenhum dado compatível." })
 })
 
 api.post("/users", async (req, res) => {
