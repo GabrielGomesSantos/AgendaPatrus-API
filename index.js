@@ -252,25 +252,16 @@ api.get("/users/verify", async (req, res) => {
 api.get("/users", async (req, res) => {
     let userData = req.body
 
-    let valor = ""
-    valor = userData.email ? "email" : valor
-    valor = userData.fullname ? "fullname" : valor
-
-    if(!valor) {
-        return res.json({message: "Nenhum valor foi passado para buscar."})
-    }
-
-    if(valor === "fullname") {
+    if(userData.fullname) {
         let userSearch = await modelUsers.findOne({ fullname: userData.fullname })
         return res.status(200).json(userSearch)
-    }
-
-    if(valor === "email") {
-        let userSearch = await modelUsers.findOne({ fullname: userData.fullname })
+    } else if(userData.email) {
+        let userSearch = await modelUsers.findOne({ email: userData.email })
         return res.status(200).json(userSearch)
+    } else {
+        return res.status(400).json({ message: "Nenhum dado compatível." })
     }
 
-    return res.status(400).json({ message: "Nenhum dado compatível." })
 })
 
 api.post("/users", async (req, res) => {
