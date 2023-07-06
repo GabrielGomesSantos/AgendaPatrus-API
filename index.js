@@ -219,9 +219,15 @@ api.get("/all", async (req, res) => {
 })
 
 // |||||====||||| usuarios |||||====|||||
-api.get("/users", async (req, res) => {
+api.get("/users/verify", async (req, res) => {
     let userData = req.body
-    let userFind = await modelUsers.findOne((user) => user.fullname === userData.fullname || user.email === userData.email)
+    let usersFind = await modelUsers.find({
+        $or: [
+            { fullname: userData.fullname },
+            { email: userData.email }
+        ]
+    })
+    let userFind = usersFind[0] || null
     console.log(userFind)
 
     if (userFind) {
@@ -238,7 +244,7 @@ api.get("/users", async (req, res) => {
 
 api.post("/users", async (req, res) => {
     let userData = req.body
-    const usersFind = await modelUsers.find({
+    let usersFind = await modelUsers.find({
         $or: [
             { fullname: userData.fullname },
             { email: userData.email }
