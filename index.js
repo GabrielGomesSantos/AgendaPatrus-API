@@ -258,7 +258,7 @@ api.post("/users", async (req, res) => {
     console.log(userFind)
 
     if (userFind) {
-        return res.status(409).json({
+        return res.status(200).json({
             code: 409,
             message: "Uma conta já criada utiliza esse email ou senha."
         })
