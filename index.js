@@ -250,7 +250,7 @@ api.get("/users/verify", async (req, res) => {
 })
 
 api.get("/users", async (req, res) => {
-    let userData = req.body
+    let userData = req.params
     console.log(userData)
 
     if(userData.fullname) {
