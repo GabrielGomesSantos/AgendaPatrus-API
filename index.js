@@ -231,19 +231,21 @@ api.get("/users/verify", async (req, res) => {
             { fullname: userData.fullname },
             { email: userData.email }
         ]
-    })
+    });
     let userFind = usersFind[0] || null
+    console.log(userFind)
 
     if (userFind) {
         return res.status(200).json({
             permission: false,
             userExisting: userFind
         })
+    } else {
+        return res.status(200).json({
+            permission: true
+        })
     }
-
-    return res.status(200).json({
-        permission: true
-    })
+    
 })
 
 api.post("/users", async (req, res) => {
@@ -255,7 +257,6 @@ api.post("/users", async (req, res) => {
         ]
     });
     let userFind = usersFind[0] || null
-    console.log(userFind)
 
     if (userFind) {
         return res.status(200).json({
