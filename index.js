@@ -6,7 +6,7 @@ const mongoose = require("mongoose")
 const appData = require("./appData.json")
 
 api.use(bodyParser.json());
-app.use(express.json());
+api.use(express.json());
 
 mongoose.connect(appData.api.databaseURL)
     .then(() => {
