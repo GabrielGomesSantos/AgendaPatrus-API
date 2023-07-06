@@ -221,6 +221,11 @@ api.get("/all", async (req, res) => {
 // |||||====||||| usuarios |||||====|||||
 api.get("/users/verify", async (req, res) => {
     let userData = req.body
+
+    if(!userData) {
+        return res.status(400).json({message: "Nenhum dado para busca foi passado."})
+    }
+
     let usersFind = await modelUsers.find({
         $or: [
             { fullname: userData.fullname },
@@ -228,16 +233,15 @@ api.get("/users/verify", async (req, res) => {
         ]
     })
     let userFind = usersFind[0] || null
-    console.log(userFind)
 
     if (userFind) {
-        return res.json(200).json({
+        return res.status(200).json({
             permission: false,
             userExisting: userFind
         })
     }
 
-    return res.json(200).json({
+    return res.status(200).json({
         permission: true
     })
 })
