@@ -262,7 +262,7 @@ api.get("/users", async (req, res) => {
     }
 
     if(valor === "fullname") {
-        let userSearch = await modelUsers.findOne({ email: userData.email })
+        let userSearch = await modelUsers.findOne({ fullname: userData.fullname })
         console.log(userSearch)
     }
 
