@@ -251,7 +251,6 @@ api.get("/users/verify", async (req, res) => {
 
 api.get("/users", async (req, res) => {
     let userData = req.query
-    console.log(userData)
 
     if(userData.fullname) {
         let userSearch = await modelUsers.findOne({ fullname: userData.fullname })
@@ -260,7 +259,7 @@ api.get("/users", async (req, res) => {
         let userSearch = await modelUsers.findOne({ email: userData.email })
         return res.status(200).json(userSearch)
     } else {
-        return res.status(400).json({ message: "Nenhum dado compatível." })
+        return res.status(200).json({ search: null, message: "Nenhum dado compatível." })
     }
 
 })
