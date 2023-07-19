@@ -264,7 +264,7 @@ api.get("/users", async (req, res) => {
 
 })
 
-api.post("/users", async (req, res) => {
+api.post("/users/old", async (req, res) => {
     let userData = req.body
     let usersFind = await modelUsers.find({
         $or: [
@@ -280,6 +280,8 @@ api.post("/users", async (req, res) => {
             message: "Uma conta já criada utiliza esse email ou senha."
         })
     }
+
+    
 
     new modelUsers(userData).save()
         .then(() => {
@@ -299,4 +301,27 @@ api.post("/users", async (req, res) => {
 
             return res.status(400).json(dataResp)
         })
+})
+
+api.post("/users", async (req, res) => {
+    let userData = req.body
+
+    let modeloUserData = {
+        fullname: "",
+        email: "",
+        password: "",
+        turma: "" // 1MA 1MB 1MC | 2MA 2MB 2MC | 3MA 3MB 3MC
+    }
+
+    let modelSendUser = {
+        fullname: userData.fullname || "",
+        email: userData.email || "",
+        password: userData.password || "",
+        turma: userData.turma || null,
+    }
+
+    new modelUsers(modelSendUser).save()
+        .then((data) => {return res.status(200).json(data)})
+        .catch((err) => {return res.status(400).json(err )})
+
 })
