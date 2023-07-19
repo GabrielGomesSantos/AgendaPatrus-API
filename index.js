@@ -173,6 +173,7 @@ var modelUsers = mongoose.model("User", mongoose.Schema({
     fullname: String,
     email: String,
     password: String,
+    turma: String,
 }))
 
 // -------------------------------------------------------------
