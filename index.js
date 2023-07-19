@@ -260,48 +260,9 @@ api.get("/users", async (req, res) => {
         let userSearch = await modelUsers.findOne({ email: userData.email })
         return res.status(200).json(userSearch)
     } else {
-        return res.status(200).json({ search: null, message: "Nenhum dado compatível." })
+        return res.status(200).json(null)
     }
 
-})
-
-api.post("/users/old", async (req, res) => {
-    let userData = req.body
-    let usersFind = await modelUsers.find({
-        $or: [
-            { fullname: userData.fullname },
-            { email: userData.email }
-        ]
-    });
-    let userFind = usersFind[0] || null
-
-    if (userFind) {
-        return res.status(200).json({
-            code: 409,
-            message: "Uma conta já criada utiliza esse email ou senha."
-        })
-    }
-
-    
-
-    new modelUsers(userData).save()
-        .then(() => {
-            let dataResp = {
-                form: userData,
-                status: 200
-            }
-
-            return res.status(200).json(dataResp)
-        })
-        .catch(err => {
-            let dataResp = {
-                form: userData,
-                status: 400,
-                erro: err
-            }
-
-            return res.status(400).json(dataResp)
-        })
 })
 
 api.post("/users", async (req, res) => {
@@ -326,3 +287,12 @@ api.post("/users", async (req, res) => {
         .catch((err) => {return res.status(400).json(err )})
 
 })
+
+/*
+    let usersFind = await modelUsers.find({
+        $or: [
+            { fullname: userData.fullname },
+            { email: userData.email }
+        ]
+    });
+*/
