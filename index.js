@@ -266,7 +266,7 @@ api.get("/users", async (req, res) => {
 })
 
 api.post("/users", async (req, res) => {
-    let userData = req.body
+    let userData = req.body?.params
     console.log(userData)
 
     let modeloUserData = {
