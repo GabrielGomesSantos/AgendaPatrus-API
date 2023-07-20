@@ -183,6 +183,25 @@ var modelMarkedTasks = mongoose.model("MarkedTask", mongoose.Schema({
     }
 }))
 
+modelMarkedTasks.pre('save', async function (next) {
+    const doc = this;
+    if (!doc.isNew) { // Verifica se é um novo documento ou uma atualização
+        return next();
+    }
+
+    try {
+        // Encontra o último documento com o maior _id
+        const lastUser = await this.constructor.findOne({}, {}, { sort: { _id: -1 } });
+        const lastId = lastUser ? lastUser._id : 0;
+
+        // Incrementa o _id para um número acima do último
+        doc._id = lastId + 1;
+        return next();
+    } catch (error) {
+        return next(error);
+    }
+});
+
 // -------------------------------------------------------------
 
 api.get("/", async (req, res) => {
@@ -211,29 +230,29 @@ api.post("/tasks", async (req, res) => {
     }
 
     new modelTask(taskSend).save()
-        .then((data) => {return res.status(200).json(data)})
-        .catch((err) => {return res.status(400).json(err )})
+        .then((data) => { return res.status(200).json(data) })
+        .catch((err) => { return res.status(400).json(err) })
 })
 
 api.get("/tasks/one", async (req, res) => {
     var contentFind = req.body
-    if(Object.keys(contentFind).length === 0) {
+    if (Object.keys(contentFind).length === 0) {
         contentFind = req.query
     }
 
-    if(contentFind.title) {
+    if (contentFind.title) {
         let taskSearch = await modelTask.findOne({ title: contentFind.title })
         return res.status(200).json(taskSearch)
-    } else if(contentFind.description) {
+    } else if (contentFind.description) {
         let taskSearch = await modelTask.findOne({ description: contentFind.description })
         return res.status(200).json(taskSearch)
-    } else if(contentFind.type) {
+    } else if (contentFind.type) {
         let taskSearch = await modelTask.findOne({ type: contentFind.type })
         return res.status(200).json(taskSearch)
-    } else if(contentFind.date) {
+    } else if (contentFind.date) {
         let taskSearch = await modelTask.findOne({ date: contentFind.date })
         return res.status(200).json(taskSearch)
-    } else if(contentFind.turma) {
+    } else if (contentFind.turma) {
         let taskSearch = await modelTask.findOne({ turma: contentFind.turma })
         return res.status(200).json(taskSearch)
     } else {
@@ -243,23 +262,23 @@ api.get("/tasks/one", async (req, res) => {
 
 api.get("/tasks/several", async (req, res) => {
     var contentFind = req.body
-    if(Object.keys(contentFind).length === 0) {
+    if (Object.keys(contentFind).length === 0) {
         contentFind = req.query
     }
 
-    if(contentFind.title) {
+    if (contentFind.title) {
         let taskSearch = await modelTask.find({ title: contentFind.title })
         return res.status(200).json(taskSearch)
-    } else if(contentFind.description) {
+    } else if (contentFind.description) {
         let taskSearch = await modelTask.find({ description: contentFind.description })
         return res.status(200).json(taskSearch)
-    } else if(contentFind.type) {
+    } else if (contentFind.type) {
         let taskSearch = await modelTask.find({ type: contentFind.type })
         return res.status(200).json(taskSearch)
-    } else if(contentFind.date) {
+    } else if (contentFind.date) {
         let taskSearch = await modelTask.find({ date: contentFind.date })
         return res.status(200).json(taskSearch)
-    } else if(contentFind.turma) {
+    } else if (contentFind.turma) {
         let taskSearch = await modelTask.find({ turma: contentFind.turma })
         return res.status(200).json(taskSearch)
     } else {
@@ -282,8 +301,8 @@ api.get("/users/verify", async (req, res) => {
     let userData = req.body
     console.log(userData)
 
-    if(!userData) {
-        return res.status(400).json({message: "Nenhum dado para busca foi passado."})
+    if (!userData) {
+        return res.status(400).json({ message: "Nenhum dado para busca foi passado." })
     }
 
     let usersFind = await modelUsers.find({
@@ -305,16 +324,16 @@ api.get("/users/verify", async (req, res) => {
             permission: true
         })
     }
-    
+
 })
 
 api.get("/users", async (req, res) => {
     let userData = req.query
 
-    if(userData.fullname) {
+    if (userData.fullname) {
         let userSearch = await modelUsers.findOne({ fullname: userData.fullname })
         return res.status(200).json(userSearch)
-    } else if(userData.email) {
+    } else if (userData.email) {
         let userSearch = await modelUsers.findOne({ email: userData.email })
         return res.status(200).json(userSearch)
     } else {
@@ -342,8 +361,8 @@ api.post("/users", async (req, res) => {
     }
 
     new modelUsers(modelSendUser).save()
-        .then((data) => {return res.status(200).json(data)})
-        .catch((err) => {return res.status(400).json(err )})
+        .then((data) => { return res.status(200).json(data) })
+        .catch((err) => { return res.status(400).json(err) })
 
 })
 // |||||====||||| -------- |||||====|||||
@@ -372,7 +391,7 @@ api.post("/markedtasks", async (req, res) => {
 api.post("/markedtasks/testeid", async (req, res) => {
     new modelMarkedTasks({
         teste: "Olá"
-    }).save().then((resp) => {return res.status(200).json(resp)})    
+    }).save().then((resp) => { return res.status(200).json(resp) })
 })
 
 api.delete("/markedtasks", async (req, res) => {
