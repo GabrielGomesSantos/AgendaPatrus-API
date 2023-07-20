@@ -230,8 +230,8 @@ api.get("/tasks/one", async (req, res) => {
 
 api.get("/tasks/several", async (req, res) => {
     var contentFind = req.body
-    console.log(contentFind === {})
-    if(contentFind === {}) {
+    console.log(contentFind.keys())
+    if(Object.keys(contentFind).length === 0) {
         contentFind = req.query
     }
 
