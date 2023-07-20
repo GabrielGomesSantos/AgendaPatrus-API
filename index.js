@@ -177,7 +177,10 @@ var modelMarkedTasks = mongoose.model("MarkedTask", mongoose.Schema({
     id_task: String,
     id_user: String,
     timestamp: Number,
-    _id: Number
+    _id: {
+        type: Number,
+        default: 0
+    }
 }))
 
 // -------------------------------------------------------------
