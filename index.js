@@ -209,8 +209,8 @@ async function increment(next) {
     }
   }
 
-schemaMarkedTasks.pre('save', increment());
-schemaTasks.pre('save', increment())
+schemaMarkedTasks.pre('save', increment);
+schemaTasks.pre('save', increment)
   /*
 schemaMarkedTasks.plugin(autoIncrement.plugin, {
     model: 'MarkedTask',
