@@ -179,18 +179,39 @@ var schemaMarkedTasks = new mongoose.Schema({
     id_task: String,
     id_user: String,
     timestamp: Number,
-    customId: {
+    _id: {
         type: Number,
         default: 0
     }
 })
 
+schemaMarkedTasks.pre('save', async function (next) {
+    const doc = this;
+    if (!doc.isNew) { // Verifica se é um novo documento ou uma atualização
+      return next();
+    }
+  
+    try {
+      // Encontra o último documento com o maior _id
+      const lastUser = await this.constructor.findOne({}, {}, { sort: { _id: -1 } });
+      const lastId = lastUser ? lastUser._id : 0;
+  
+      // Incrementa o _id para um número acima do último
+      doc._id = lastId + 1;
+      return next();
+    } catch (error) {
+      return next(error);
+    }
+  });
+
+  /*
 schemaMarkedTasks.plugin(autoIncrement.plugin, {
     model: 'MarkedTask',
     field: '_id', // Nome do campo que será incrementado
     startAt: 1, // Valor inicial do _id
     incrementBy: 1, // Incremento para o próximo _id
 })
+*/
 
 const modelMarkedTasks = mongoose.model('MarkedTask', schemaMarkedTasks);
 
