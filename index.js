@@ -14,10 +14,8 @@ mongoose.connect(appData.api.databaseURL)
         api.listen(4000, async () => {
             console.log("🟢 | API ligada com sucesso!")
 
-            console.log("PAROU 1")
 
             setInterval(async () => {
-                console.log("PAROU 2")
                 async function sendNotification(dataPush) {
                     let headers = {
                         'Content-Type': 'application/json',
@@ -35,9 +33,7 @@ mongoose.connect(appData.api.databaseURL)
 
                 let items = await modelTask.find()
                 let dateNow = new Date()
-                console.log("PAROU 3")
                 if (dateNow.getHours() === 7) { // 7 | UTC+3
-                    console.log("PAROU 4")
                     const milliseconds = Date.now()
                     const days = milliseconds / (24 * 60 * 60 * 1000)
                     let day = Math.floor(days)
@@ -185,9 +181,8 @@ api.get("/", async (req, res) => {
 
 // |||||====||||| tarefas |||||====|||||
 
-api.post("/createTask", async (req, res) => {
+api.post("/tasks", async (req, res) => {
     let taskData = req.body
-    console.log(taskData)
 
     let estruturaExemplo = {
         title: "",
@@ -211,37 +206,6 @@ api.post("/createTask", async (req, res) => {
 })
 
 // -------------------------------------
-
-api.post("/createTask/old", async (req, res) => {
-    let response = req.body
-
-    let newTask = {
-        title: response.title,
-        description: response.description,
-        type: response.type,
-        date: response.date
-    }
-
-    new modelTask(newTask).save()
-        .then(() => {
-            let dataResp = {
-                form: newTask,
-                status: 200
-            }
-
-            return res.status(200).json(dataResp)
-        })
-        .catch(err => {
-            let dataResp = {
-                form: response,
-                status: 400,
-                erro: err
-            }
-
-            return res.status(400).json(dataResp)
-        })
-
-})
 
 api.get("/all", async (req, res) => {
     let items = await modelTask.find()
