@@ -230,6 +230,7 @@ api.get("/tasks/one", async (req, res) => {
 
 api.get("/tasks/several", async (req, res) => {
     let contentFind = req.body
+    console.log(req.body)
     console.log(req.query)
 
     if(contentFind.title) {
