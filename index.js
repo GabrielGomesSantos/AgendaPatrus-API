@@ -230,6 +230,7 @@ api.get("/tasks/one", async (req, res) => {
 
 api.get("/tasks/several", async (req, res) => {
     let contentFind = req.body
+    console.log(req.body)
 
     if(contentFind.title) {
         let taskSearch = await modelTask.find({ title: contentFind.title })
