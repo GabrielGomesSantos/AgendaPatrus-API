@@ -205,6 +205,52 @@ api.post("/tasks", async (req, res) => {
         .catch((err) => {return res.status(400).json(err )})
 })
 
+api.get("/tasks/one", async (req, res) => {
+    let contentFind = req.body
+
+    if(contentFind.title) {
+        let taskSearch = await modelTask.findOne({ title: contentFind.title })
+        return res.status(200).json(taskSearch)
+    } else if(contentFind.description) {
+        let taskSearch = await modelTask.findOne({ description: contentFind.description })
+        return res.status(200).json(taskSearch)
+    } else if(contentFind.type) {
+        let taskSearch = await modelTask.findOne({ type: contentFind.type })
+        return res.status(200).json(taskSearch)
+    } else if(contentFind.date) {
+        let taskSearch = await modelTask.findOne({ date: contentFind.date })
+        return res.status(200).json(taskSearch)
+    } else if(contentFind.turma) {
+        let taskSearch = await modelTask.findOne({ turma: contentFind.turma })
+        return res.status(200).json(taskSearch)
+    } else {
+        return res.status(400).json(null)
+    }
+})
+
+api.get("/tasks/several", async (req, res) => {
+    let contentFind = req.body
+
+    if(contentFind.title) {
+        let taskSearch = await modelTask.find({ title: contentFind.title })
+        return res.status(200).json(taskSearch)
+    } else if(contentFind.description) {
+        let taskSearch = await modelTask.find({ description: contentFind.description })
+        return res.status(200).json(taskSearch)
+    } else if(contentFind.type) {
+        let taskSearch = await modelTask.find({ type: contentFind.type })
+        return res.status(200).json(taskSearch)
+    } else if(contentFind.date) {
+        let taskSearch = await modelTask.find({ date: contentFind.date })
+        return res.status(200).json(taskSearch)
+    } else if(contentFind.turma) {
+        let taskSearch = await modelTask.find({ turma: contentFind.turma })
+        return res.status(200).json(taskSearch)
+    } else {
+        return res.status(400).json(null)
+    }
+})
+
 // -------------------------------------
 
 api.get("/all", async (req, res) => {
