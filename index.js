@@ -161,7 +161,7 @@ var schemaTasks = new mongoose.Schema({
     type: String,
     date: Number,
     turma: String,
-    _id: {
+    id: {
         type: Number,
         default: 0
     }
@@ -186,7 +186,7 @@ var schemaMarkedTasks = new mongoose.Schema({
     id_task: String,
     id_user: String,
     timestamp: Number,
-    _id: {
+    id: {
         type: Number,
         default: 0
     }
@@ -199,10 +199,10 @@ async function increment(next) {
     }
   
     try {
-      const lastUser = await this.constructor.findOne({}, {}, { sort: { _id: -1 } });
-      const lastId = lastUser ? lastUser._id : 0;
+      const lastUser = await this.constructor.findOne({}, {}, { sort: { id: -1 } });
+      const lastId = lastUser ? lastUser.id : 0;
   
-      doc._id = lastId + 1;
+      doc.id = lastId + 1;
       return next();
     } catch (error) {
       return next(error);
@@ -214,8 +214,8 @@ schemaTasks.pre('save', increment)
   /*
 schemaMarkedTasks.plugin(autoIncrement.plugin, {
     model: 'MarkedTask',
-    field: '_id', // Nome do campo que será incrementado
-    startAt: 1, // Valor inicial do _id
+    field: 'id', // Nome do campo que será incrementado
+    startAt: 1, // Valor inicial do id
     incrementBy: 1, // Incremento para o próximo _id
 })
 */
