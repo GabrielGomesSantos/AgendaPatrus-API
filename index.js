@@ -206,7 +206,10 @@ api.post("/tasks", async (req, res) => {
 })
 
 api.get("/tasks/one", async (req, res) => {
-    let contentFind = req.body
+    var contentFind = req.body
+    if(Object.keys(contentFind).length === 0) {
+        contentFind = req.query
+    }
 
     if(contentFind.title) {
         let taskSearch = await modelTask.findOne({ title: contentFind.title })
@@ -230,12 +233,9 @@ api.get("/tasks/one", async (req, res) => {
 
 api.get("/tasks/several", async (req, res) => {
     var contentFind = req.body
-    console.log(Object.keys(contentFind).length)
     if(Object.keys(contentFind).length === 0) {
         contentFind = req.query
     }
-
-    console.log(`Valor final: `, contentFind)
 
     if(contentFind.title) {
         let taskSearch = await modelTask.find({ title: contentFind.title })
