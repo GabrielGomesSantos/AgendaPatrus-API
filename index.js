@@ -4,6 +4,7 @@ const api = express()
 const bodyParser = require("body-parser")
 const mongoose = require("mongoose")
 const appData = require("./appData.json")
+const autoIncrement = require("mongoose-auto-increment")
 
 api.use(bodyParser.json());
 
@@ -173,7 +174,8 @@ var modelUsers = mongoose.model("User", mongoose.Schema({
     turma: String,
 }))
 
-var modelMarkedTasks = mongoose.model("MarkedTask", new mongoose.Schema({
+
+var schemaMarkedTasks = new mongoose.Schema({
     id_task: String,
     id_user: String,
     timestamp: Number,
@@ -181,26 +183,16 @@ var modelMarkedTasks = mongoose.model("MarkedTask", new mongoose.Schema({
         type: Number,
         default: 0
     }
-}))
+})
 
-modelMarkedTasks.pre('save', async function (next) {
-    const doc = this;
-    if (!doc.isNew) { // Verifica se é um novo documento ou uma atualização
-        return next();
-    }
+schemaMarkedTasks.plugin(autoIncrement.plugin, {
+    model: 'MarkedTask',
+    field: '_id', // Nome do campo que será incrementado
+    startAt: 1, // Valor inicial do _id
+    incrementBy: 1, // Incremento para o próximo _id
+})
 
-    try {
-        // Encontra o último documento com o maior customId
-        const lastUser = await this.constructor.findOne({}, {}, { sort: { customId: -1 } });
-        const lastId = lastUser ? lastUser.customId : 0;
-
-        // Incrementa o customId para um número acima do último
-        doc.customId = lastId + 1;
-        return next();
-    } catch (error) {
-        return next(error);
-    }
-});
+const modelMarkedTasks = mongoose.model('MarkedTask', schemaMarkedTasks);
 
 // -------------------------------------------------------------
 
@@ -390,7 +382,7 @@ api.post("/markedtasks", async (req, res) => {
 
 api.post("/markedtasks/testeid", async (req, res) => {
     new modelMarkedTasks({
-        teste: "Olá"
+        id_task: "Olá"
     }).save().then((resp) => { return res.status(200).json(resp) })
 })
 
