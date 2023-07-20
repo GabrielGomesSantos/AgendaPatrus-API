@@ -155,7 +155,7 @@ mongoose.connect(appData.api.databaseURL)
 
 // -------------------------------------------------------------
 
-var modelTask = mongoose.model("Task", mongoose.Schema({
+var schemaTasks = new mongoose.Schema({
     title: String,
     description: String,
     type: String,
@@ -165,7 +165,10 @@ var modelTask = mongoose.model("Task", mongoose.Schema({
         type: Number,
         default: 0
     }
-}))
+})
+
+// =============================================================
+
 
 var modelLogAlerts = mongoose.model("LogAlert", mongoose.Schema({
     day: Number
@@ -189,25 +192,25 @@ var schemaMarkedTasks = new mongoose.Schema({
     }
 })
 
-schemaMarkedTasks.pre('save', async function (next) {
+async function increment(next) {
     const doc = this;
-    if (!doc.isNew) { // Verifica se é um novo documento ou uma atualização
+    if (!doc.isNew) {
       return next();
     }
   
     try {
-      // Encontra o último documento com o maior _id
       const lastUser = await this.constructor.findOne({}, {}, { sort: { _id: -1 } });
       const lastId = lastUser ? lastUser._id : 0;
   
-      // Incrementa o _id para um número acima do último
       doc._id = lastId + 1;
       return next();
     } catch (error) {
       return next(error);
     }
-  });
+  }
 
+schemaMarkedTasks.pre('save', increment());
+schemaTasks.pre('save', increment())
   /*
 schemaMarkedTasks.plugin(autoIncrement.plugin, {
     model: 'MarkedTask',
@@ -216,7 +219,7 @@ schemaMarkedTasks.plugin(autoIncrement.plugin, {
     incrementBy: 1, // Incremento para o próximo _id
 })
 */
-
+const modelTask =        mongoose.model("Task",       schemaTasks)
 const modelMarkedTasks = mongoose.model('MarkedTask', schemaMarkedTasks);
 
 // -------------------------------------------------------------
