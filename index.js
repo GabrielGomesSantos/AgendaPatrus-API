@@ -173,11 +173,11 @@ var modelUsers = mongoose.model("User", mongoose.Schema({
     turma: String,
 }))
 
-var modelMarkedTasks = mongoose.model("MarkedTask", mongoose.Schema({
+var modelMarkedTasks = mongoose.model("MarkedTask", new mongoose.Schema({
     id_task: String,
     id_user: String,
     timestamp: Number,
-    _id: {
+    customId: {
         type: Number,
         default: 0
     }
@@ -190,12 +190,12 @@ modelMarkedTasks.pre('save', async function (next) {
     }
 
     try {
-        // Encontra o último documento com o maior _id
-        const lastUser = await this.constructor.findOne({}, {}, { sort: { _id: -1 } });
-        const lastId = lastUser ? lastUser._id : 0;
+        // Encontra o último documento com o maior customId
+        const lastUser = await this.constructor.findOne({}, {}, { sort: { customId: -1 } });
+        const lastId = lastUser ? lastUser.customId : 0;
 
-        // Incrementa o _id para um número acima do último
-        doc._id = lastId + 1;
+        // Incrementa o customId para um número acima do último
+        doc.customId = lastId + 1;
         return next();
     } catch (error) {
         return next(error);
