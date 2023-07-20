@@ -4,7 +4,6 @@ const api = express()
 const bodyParser = require("body-parser")
 const mongoose = require("mongoose")
 const appData = require("./appData.json")
-const autoIncrement = require("mongoose-auto-increment")
 
 api.use(bodyParser.json());
 
@@ -167,20 +166,24 @@ var schemaTasks = new mongoose.Schema({
     }
 })
 
-// =============================================================
+var schemaLogAlerts = new mongoose.Schema({
+    day: Number,
+    id: {
+        type: Number,
+        default: 0
+    }
+})
 
-
-var modelLogAlerts = mongoose.model("LogAlert", mongoose.Schema({
-    day: Number
-}))
-
-var modelUsers = mongoose.model("User", mongoose.Schema({
+var schemaUsers = new mongoose.Schema({
     fullname: String,
     email: String,
     password: String,
     turma: String,
-}))
-
+    id: {
+        type: Number,
+        default: 0
+    }
+})
 
 var schemaMarkedTasks = new mongoose.Schema({
     id_task: String,
@@ -195,32 +198,29 @@ var schemaMarkedTasks = new mongoose.Schema({
 async function increment(next) {
     const doc = this;
     if (!doc.isNew) {
-      return next();
+        return next();
     }
-  
-    try {
-      const lastUser = await this.constructor.findOne({}, {}, { sort: { id: -1 } });
-      const lastId = lastUser ? lastUser.id : 0;
-  
-      doc.id = lastId + 1;
-      return next();
-    } catch (error) {
-      return next(error);
-    }
-  }
 
-schemaMarkedTasks.pre('save', increment);
+    try {
+        const lastUser = await this.constructor.findOne({}, {}, { sort: { id: -1 } });
+        const lastId = lastUser ? lastUser.id : 0;
+
+        doc.id = lastId + 1;
+        return next();
+    } catch (error) {
+        return next(error);
+    }
+}
+
 schemaTasks.pre('save', increment)
-  /*
-schemaMarkedTasks.plugin(autoIncrement.plugin, {
-    model: 'MarkedTask',
-    field: 'id', // Nome do campo que será incrementado
-    startAt: 1, // Valor inicial do id
-    incrementBy: 1, // Incremento para o próximo _id
-})
-*/
+schemaLogAlerts.pre('save', increment)
+schemaUsers.pre('save', increment)
+schemaMarkedTasks.pre('save', increment);
+
 const modelTask =        mongoose.model("Task",       schemaTasks)
+const modelLogAlerts =   mongoose.model("LogAlert",   schemaLogAlerts)
 const modelMarkedTasks = mongoose.model('MarkedTask', schemaMarkedTasks);
+const modelUsers =       mongoose.model("User",       schemaUsers)
 
 // -------------------------------------------------------------
 
@@ -403,8 +403,23 @@ api.get("/markedtasks", async (req, res) => {
 
 api.post("/markedtasks", async (req, res) => {
     let taskData = req.body
-    console.log(taskData)
+    
+    let taskMarkedExemplo = {
+        id_task: 0, // id da tarefa
+        id_user: 0, // id do usuario que marcou
+        timestamp: 0, // data atual em milissegundos
+        id: 0 // id do item que esta sendo criado...
+    }
 
+    let objectSend = {
+        id_task: taskData.id_task,
+        id_user: taskData.id_user,
+        timestamp: Date.now()
+    }
+
+    new modelMarkedTasks(objectSend).save()
+        .then((data) => {return res.status(200).json(data)})
+        .catch((err) => {return res.status(400).json(err) })
 
 })
 
