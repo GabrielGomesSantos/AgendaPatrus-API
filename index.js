@@ -229,9 +229,12 @@ api.get("/tasks/one", async (req, res) => {
 })
 
 api.get("/tasks/several", async (req, res) => {
-    let contentFind = req.body
-    console.log(req.body)
-    console.log(req.query)
+    var contentFind = req.body
+    let verifCont = contentFind.values()
+    console.log(verifCont)
+    if(!verifCont[0]) {
+        contentFind = req.query
+    }
 
     if(contentFind.title) {
         let taskSearch = await modelTask.find({ title: contentFind.title })
