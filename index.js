@@ -161,6 +161,10 @@ var modelTask = mongoose.model("Task", mongoose.Schema({
     type: String,
     date: Number,
     turma: String,
+    _id: {
+        type: Number,
+        default: 0
+    }
 }))
 
 var modelLogAlerts = mongoose.model("LogAlert", mongoose.Schema({
