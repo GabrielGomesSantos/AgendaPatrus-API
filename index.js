@@ -173,6 +173,13 @@ var modelUsers = mongoose.model("User", mongoose.Schema({
     turma: String,
 }))
 
+var modelMarkedTasks = mongoose.model("MarkedTask", mongoose.Schema({
+    id_task: String,
+    id_user: String,
+    timestamp: Number,
+    _id: Number
+}))
+
 // -------------------------------------------------------------
 
 api.get("/", async (req, res) => {
@@ -264,6 +271,7 @@ api.get("/all", async (req, res) => {
 
     return res.status(200).json(items)
 })
+
 // |||||====||||| ------- |||||====|||||
 
 // |||||====||||| usuarios |||||====|||||
@@ -344,3 +352,28 @@ api.post("/users", async (req, res) => {
         ]
     });
 */
+
+// |||||====||||| tarefas concluídas |||||====|||||
+
+api.get("/markedtasks", async (req, res) => {
+
+})
+
+api.post("/markedtasks", async (req, res) => {
+    let taskData = req.body
+    console.log(taskData)
+
+
+})
+
+api.post("/markedtasks/testeid", async (req, res) => {
+    new modelMarkedTasks({
+        teste: "Olá"
+    }).save().then((resp) => {return res.status(200).json(resp)})    
+})
+
+api.delete("/markedtasks", async (req, res) => {
+
+})
+
+// |||||====||||| ------------------ |||||====|||||
