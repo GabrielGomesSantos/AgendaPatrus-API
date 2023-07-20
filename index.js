@@ -163,6 +163,7 @@ var modelTask = mongoose.model("Task", mongoose.Schema({
     description: String,
     type: String,
     date: Number,
+    turma: String,
 }))
 
 var modelLogAlerts = mongoose.model("LogAlert", mongoose.Schema({
@@ -182,7 +183,36 @@ api.get("/", async (req, res) => {
     return res.status(200).json({ result: "Sucess" })
 })
 
+// |||||====||||| tarefas |||||====|||||
+
 api.post("/createTask", async (req, res) => {
+    let taskData = req.body
+    console.log(taskData)
+
+    let estruturaExemplo = {
+        title: "",
+        description: "",
+        type: "",
+        date: 0,
+        turma: "",
+    }
+
+    let taskSend = {
+        title: taskData.title,
+        description: taskData.description,
+        type: taskData.type,
+        date: taskData.date,
+        turma: taskData.turma
+    }
+
+    new modelTask(taskSend).save()
+        .then((data) => {return res.status(200).json(data)})
+        .catch((err) => {return res.status(400).json(err )})
+})
+
+// -------------------------------------
+
+api.post("/createTask/old", async (req, res) => {
     let response = req.body
 
     let newTask = {
@@ -218,6 +248,7 @@ api.get("/all", async (req, res) => {
 
     return res.status(200).json(items)
 })
+// |||||====||||| ------- |||||====|||||
 
 // |||||====||||| usuarios |||||====|||||
 api.get("/users/verify", async (req, res) => {
@@ -288,7 +319,7 @@ api.post("/users", async (req, res) => {
         .catch((err) => {return res.status(400).json(err )})
 
 })
-
+// |||||====||||| -------- |||||====|||||
 /*
     let usersFind = await modelUsers.find({
         $or: [
