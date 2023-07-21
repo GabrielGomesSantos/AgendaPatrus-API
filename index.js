@@ -186,8 +186,8 @@ var schemaUsers = new mongoose.Schema({
 })
 
 var schemaMarkedTasks = new mongoose.Schema({
-    id_task: String,
-    id_user: String,
+    id_task: Number,
+    id_user: Number,
     timestamp: Number,
     id: {
         type: Number,
@@ -217,10 +217,10 @@ schemaLogAlerts.pre('save', increment)
 schemaUsers.pre('save', increment)
 schemaMarkedTasks.pre('save', increment);
 
-const modelTask =        mongoose.model("Task",       schemaTasks)
-const modelLogAlerts =   mongoose.model("LogAlert",   schemaLogAlerts)
+const modelTask = mongoose.model("Task", schemaTasks)
+const modelLogAlerts = mongoose.model("LogAlert", schemaLogAlerts)
 const modelMarkedTasks = mongoose.model('MarkedTask', schemaMarkedTasks);
-const modelUsers =       mongoose.model("User",       schemaUsers)
+const modelUsers = mongoose.model("User", schemaUsers)
 
 // -------------------------------------------------------------
 
@@ -230,28 +230,10 @@ api.get("/", async (req, res) => {
 
 // |||||====||||| tarefas |||||====|||||
 
-api.post("/tasks", async (req, res) => {
-    let taskData = req.body
+api.get("/tasks", async (req, res) => {
+    let items = await modelTask.find()
 
-    let estruturaExemplo = {
-        title: "",
-        description: "",
-        type: "",
-        date: 0,
-        turma: "",
-    }
-
-    let taskSend = {
-        title: taskData.title,
-        description: taskData.description,
-        type: taskData.type,
-        date: taskData.date,
-        turma: taskData.turma
-    }
-
-    new modelTask(taskSend).save()
-        .then((data) => { return res.status(200).json(data) })
-        .catch((err) => { return res.status(400).json(err) })
+    return res.status(200).json(items)
 })
 
 api.get("/tasks/one", async (req, res) => {
@@ -306,12 +288,28 @@ api.get("/tasks/several", async (req, res) => {
     }
 })
 
-// -------------------------------------
+api.post("/tasks", async (req, res) => {
+    let taskData = req.body
 
-api.get("/all", async (req, res) => {
-    let items = await modelTask.find()
+    let estruturaExemplo = {
+        title: "",
+        description: "",
+        type: "",
+        date: 0,
+        turma: "",
+    }
 
-    return res.status(200).json(items)
+    let taskSend = {
+        title: taskData.title,
+        description: taskData.description,
+        type: taskData.type,
+        date: taskData.date,
+        turma: taskData.turma
+    }
+
+    new modelTask(taskSend).save()
+        .then((data) => { return res.status(200).json(data) })
+        .catch((err) => { return res.status(400).json(err) })
 })
 
 // |||||====||||| ------- |||||====|||||
@@ -397,13 +395,55 @@ api.post("/users", async (req, res) => {
 
 // |||||====||||| tarefas concluídas |||||====|||||
 
-api.get("/markedtasks", async (req, res) => {
+api.get("/markedtasks/one", async (req, res) => {
+    var contentFind = req.body
+    if (Object.keys(contentFind).length === 0) {
+        contentFind = req.query
+    }
 
+    if (contentFind.id_task) {
+        let taskSearch = await modelTask.findOne({ id_task: contentFind.id_task })
+        return res.status(200).json(taskSearch)
+    } else if (contentFind.id_user) {
+        let taskSearch = await modelTask.findOne({ id_user: contentFind.id_user })
+        return res.status(200).json(taskSearch)
+    } else if (contentFind.timestamp) {
+        let taskSearch = await modelTask.findOne({ timestamp: contentFind.timestamp })
+        return res.status(200).json(taskSearch)
+    } else if (contentFind.id) {
+        let taskSearch = await modelTask.findOne({ id: contentFind.id })
+        return res.status(200).json(taskSearch)
+    } else {
+        return res.status(400).json(null)
+    }
+})
+
+api.get("/markedtasks/several", async (req, res) => {
+    var contentFind = req.body
+    if (Object.keys(contentFind).length === 0) {
+        contentFind = req.query
+    }
+
+    if (contentFind.id_task) {
+        let taskSearch = await modelTask.find({ id_task: contentFind.id_task })
+        return res.status(200).json(taskSearch)
+    } else if (contentFind.id_user) {
+        let taskSearch = await modelTask.find({ id_user: contentFind.id_user })
+        return res.status(200).json(taskSearch)
+    } else if (contentFind.timestamp) {
+        let taskSearch = await modelTask.find({ timestamp: contentFind.timestamp })
+        return res.status(200).json(taskSearch)
+    } else if (contentFind.id) {
+        let taskSearch = await modelTask.find({ id: contentFind.id })
+        return res.status(200).json(taskSearch)
+    } else {
+        return res.status(400).json(null)
+    }
 })
 
 api.post("/markedtasks", async (req, res) => {
     let taskData = req.body
-    
+
     let taskMarkedExemplo = {
         id_task: 0, // id da tarefa
         id_user: 0, // id do usuario que marcou
@@ -418,19 +458,37 @@ api.post("/markedtasks", async (req, res) => {
     }
 
     new modelMarkedTasks(objectSend).save()
-        .then((data) => {return res.status(200).json(data)})
-        .catch((err) => {return res.status(400).json(err) })
+        .then((data) => { return res.status(200).json(data) })
+        .catch((err) => { return res.status(400).json(err) })
 
-})
-
-api.post("/markedtasks/testeid", async (req, res) => {
-    new modelMarkedTasks({
-        id_task: "Olá"
-    }).save().then((resp) => { return res.status(200).json(resp) })
 })
 
 api.delete("/markedtasks", async (req, res) => {
+    var contentFind = req.body
+    if (Object.keys(contentFind).length === 0) {
+        contentFind = req.query
+    }
 
+    var taskSearch = {}
+
+    if (contentFind.id_task) {
+        taskSearch = await modelTask.findOne({ id_task: contentFind.id_task })
+    } else if (contentFind.id_user) {
+        taskSearch = await modelTask.findOne({ id_user: contentFind.id_user })
+    } else if (contentFind.timestamp) {
+        taskSearch = await modelTask.findOne({ timestamp: contentFind.timestamp })
+    } else if (contentFind.id) {
+        taskSearch = await modelTask.findOne({ id: contentFind.id })
+    } else {
+        return res.status(400).json(null)
+    }
+
+    let idDelete = taskSearch?.id
+    if (!idDelete) return res.status(400).json(null)
+
+    modelMarkedTasks.deleteOne({ id: idDelete })
+        .then((data) => { return res.status(200).json(data) })
+        .catch((err) => { return res.status(400).json(err) })
 })
 
 // |||||====||||| ------------------ |||||====|||||
