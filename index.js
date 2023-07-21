@@ -492,15 +492,16 @@ api.delete("/markedtasks", async (req, res) => {
 })
 
 api.put("/markedtasks", async (req, res) => {
-    let allTasks = modelMarkedTasks.find()
+    let allTasks = await modelMarkedTasks.find()
+    console.log(allTasks)
     let contagem = 0
     allTasks.map((task) => {
         contagem++
-        modelMarkedTasks.findOneAndUpdate({ _id: item._id }, { id: contagem }).save()
+        modelMarkedTasks.findOneAndUpdate({ _id: item._id }, { $set: { id: contagem }}).save()
             .then((data) => { res.status(200).json({ result: "Sucess", item: task.title, newId: contagem }) })
             .catch((err) => { res.status(400).json(err) })
     })
-    
+
 })
 
 // |||||====||||| ------------------ |||||====|||||
