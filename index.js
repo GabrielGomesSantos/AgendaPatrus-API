@@ -384,14 +384,6 @@ api.post("/users", async (req, res) => {
 
 })
 // |||||====||||| -------- |||||====|||||
-/*
-    let usersFind = await modelUsers.find({
-        $or: [
-            { fullname: userData.fullname },
-            { email: userData.email }
-        ]
-    });
-*/
 
 // |||||====||||| tarefas concluídas |||||====|||||
 
@@ -491,6 +483,17 @@ api.delete("/markedtasks", async (req, res) => {
         .catch((err) => { return res.status(400).json(err) })
 })
 
+// |||||====||||| ------------------ |||||====|||||
+
+/*
+
+    let usersFind = await modelUsers.find({
+        $or: [
+            { fullname: userData.fullname },
+            { email: userData.email }
+        ]
+    });
+
 api.put("/markedtasks", async (req, res) => {
     let allTasks = await modelTask.find()
     let contagem = 0
@@ -504,4 +507,4 @@ api.put("/markedtasks", async (req, res) => {
 
 })
 
-// |||||====||||| ------------------ |||||====|||||
+*/
