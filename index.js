@@ -402,16 +402,16 @@ api.get("/markedtasks/one", async (req, res) => {
     }
 
     if (contentFind.id_task) {
-        let taskSearch = await modelTask.findOne({ id_task: contentFind.id_task })
+        let taskSearch = await modelMarkedTasks.findOne({ id_task: contentFind.id_task })
         return res.status(200).json(taskSearch)
     } else if (contentFind.id_user) {
-        let taskSearch = await modelTask.findOne({ id_user: contentFind.id_user })
+        let taskSearch = await modelMarkedTasks.findOne({ id_user: contentFind.id_user })
         return res.status(200).json(taskSearch)
     } else if (contentFind.timestamp) {
-        let taskSearch = await modelTask.findOne({ timestamp: contentFind.timestamp })
+        let taskSearch = await modelMarkedTasks.findOne({ timestamp: contentFind.timestamp })
         return res.status(200).json(taskSearch)
     } else if (contentFind.id) {
-        let taskSearch = await modelTask.findOne({ id: contentFind.id })
+        let taskSearch = await modelMarkedTasks.findOne({ id: contentFind.id })
         return res.status(200).json(taskSearch)
     } else {
         return res.status(400).json(null)
@@ -425,16 +425,16 @@ api.get("/markedtasks/several", async (req, res) => {
     }
 
     if (contentFind.id_task) {
-        let taskSearch = await modelTask.find({ id_task: contentFind.id_task })
+        let taskSearch = await modelMarkedTasks.find({ id_task: contentFind.id_task })
         return res.status(200).json(taskSearch)
     } else if (contentFind.id_user) {
-        let taskSearch = await modelTask.find({ id_user: contentFind.id_user })
+        let taskSearch = await modelMarkedTasks.find({ id_user: contentFind.id_user })
         return res.status(200).json(taskSearch)
     } else if (contentFind.timestamp) {
-        let taskSearch = await modelTask.find({ timestamp: contentFind.timestamp })
+        let taskSearch = await modelMarkedTasks.find({ timestamp: contentFind.timestamp })
         return res.status(200).json(taskSearch)
     } else if (contentFind.id) {
-        let taskSearch = await modelTask.find({ id: contentFind.id })
+        let taskSearch = await modelMarkedTasks.find({ id: contentFind.id })
         return res.status(200).json(taskSearch)
     } else {
         return res.status(400).json(null)
@@ -472,13 +472,13 @@ api.delete("/markedtasks", async (req, res) => {
     var taskSearch = {}
 
     if (contentFind.id_task) {
-        taskSearch = await modelTask.findOne({ id_task: contentFind.id_task })
+        taskSearch = await modelMarkedTasks.findOne({ id_task: contentFind.id_task })
     } else if (contentFind.id_user) {
-        taskSearch = await modelTask.findOne({ id_user: contentFind.id_user })
+        taskSearch = await modelMarkedTasks.findOne({ id_user: contentFind.id_user })
     } else if (contentFind.timestamp) {
-        taskSearch = await modelTask.findOne({ timestamp: contentFind.timestamp })
+        taskSearch = await modelMarkedTasks.findOne({ timestamp: contentFind.timestamp })
     } else if (contentFind.id) {
-        taskSearch = await modelTask.findOne({ id: contentFind.id })
+        taskSearch = await modelMarkedTasks.findOne({ id: contentFind.id })
     } else {
         return res.status(400).json(null)
     }
