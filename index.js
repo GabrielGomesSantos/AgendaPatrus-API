@@ -286,8 +286,6 @@ api.get("/tasks/several", async (req, res) => {
         contentFind = req.query
     }
 
-    console.log(contentFind)
-
     if (contentFind.title) {
         let taskSearch = await modelTask.find({ title: contentFind.title })
         return res.status(200).json(taskSearch)
