@@ -317,13 +317,11 @@ api.delete("/tasks", async (req, res) => {
     if (Object.keys(contentFind).length === 0) {
         contentFind = req.query
     }
-    console.log(contentFind)
 
     var taskSearch = await modelTask.findOne(contentFind)
     if(!taskSearch) {
         return res.status(200).json(null)
     }
-    console.log(taskSearch)
 
     let idDelete = taskSearch?.id
     if (!idDelete) return res.status(200).json(null)
