@@ -331,6 +331,17 @@ api.delete("/tasks", async (req, res) => {
         .catch((err) => { return res.status(200).json(err) })
 })
 
+api.put("/tasks", async (req, res) => {
+    var contentFind = req.body
+    if (Object.keys(contentFind).length === 0) {
+        contentFind = req.query
+    }
+
+    await modelTask.findOneAndUpdate({ _id: contentFind._id }, { $set: contentFind})
+    .then((data) => { res.status(200).json(data)})
+    .catch((err) => { res.status(400).json(err) })
+})
+
 // |||||====||||| ------- |||||====|||||
 
 // |||||====||||| usuarios |||||====|||||
