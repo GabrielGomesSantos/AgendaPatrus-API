@@ -312,6 +312,27 @@ api.post("/tasks", async (req, res) => {
         .catch((err) => { return res.status(400).json(err) })
 })
 
+api.delete("/tasks", async (req, res) => {
+    var contentFind = req.body
+    if (Object.keys(contentFind).length === 0) {
+        contentFind = req.query
+    }
+    console.log(contentFind)
+
+    var taskSearch = await modelTask.findOne(contentFind)
+    if(!taskSearch) {
+        return res.status(200).json(null)
+    }
+    console.log(taskSearch)
+
+    let idDelete = taskSearch?.id
+    if (!idDelete) return res.status(200).json(null)
+
+    modelTask.deleteOne({ id: idDelete })
+        .then((data) => { return res.status(200).json(data) })
+        .catch((err) => { return res.status(200).json(err) })
+})
+
 // |||||====||||| ------- |||||====|||||
 
 // |||||====||||| usuarios |||||====|||||
