@@ -336,6 +336,9 @@ api.put("/tasks", async (req, res) => {
     if (Object.keys(contentFind).length === 0) {
         contentFind = req.query
     }
+    if(contentFind?.params) {
+        contentFind = contentFind.params
+    }
 
     console.log(contentFind)
 
