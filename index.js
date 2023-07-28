@@ -337,6 +337,8 @@ api.put("/tasks", async (req, res) => {
         contentFind = req.query
     }
 
+    console.log(contentFind)
+
     await modelTask.findOneAndUpdate({ _id: contentFind._id }, { $set: contentFind})
     .then((data) => { res.status(200).json(data)})
     .catch((err) => { res.status(400).json(err) })
