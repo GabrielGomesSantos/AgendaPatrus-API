@@ -554,7 +554,7 @@ api.post("/devices", async (req, res) => {
         email: deviceData.email || "",
     }
 
-    new modelUsers(modelSendDevice).save()
+    new modelDevices(modelSendDevice).save()
         .then((data) => { return res.status(200).json(data) })
         .catch((err) => { return res.status(400).json(err) })
 
