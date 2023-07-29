@@ -197,7 +197,7 @@ var schemaMarkedTasks = new mongoose.Schema({
 var schemaDevices = new mongoose.Schema({
     userId: String,
     email: String,
-    profileId: String,
+    profileId: mongoose.Schema.Types.ObjectId,
     id: {
         type: Number,
         default: 0
@@ -544,7 +544,6 @@ api.post("/devices", async (req, res) => {
     let modelSendDevice = {
         userId: deviceData.userId,
         email: deviceData.email || "",
-        profileId: "",
     }
 
     new modelDevices(modelSendDevice).save()
