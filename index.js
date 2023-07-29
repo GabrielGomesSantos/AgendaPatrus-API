@@ -4,7 +4,6 @@ const api = express()
 const bodyParser = require("body-parser")
 const mongoose = require("mongoose")
 const appData = require("./appData.json")
-const OneSignal = require("react-native-onesignal")
 
 api.use(bodyParser.json());
 
@@ -14,16 +13,6 @@ mongoose.connect(appData.api.databaseURL)
         console.log("🟢 | MongoDB conectada com sucesso!")
         api.listen(4000, async () => {
             console.log("🟢 | API ligada com sucesso!")
-
-            OneSignal.setAppId(appData.onesginal.appId)
-
-            OneSignal.setLogLevel(6, 0);
-            OneSignal.setRequiresUserPrivacyConsent(false);
-            OneSignal.promptForPushNotificationsWithUserResponse(response => {
-                console.log('Prompt response:', response);
-            });
-
-            OneSignal.getDeviceState()
 
             setInterval(async () => {
                 async function sendNotification(dataPush) {
