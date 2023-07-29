@@ -9,7 +9,8 @@
     "express": "^4.18.2",
     "mongoose": "^7.4.0",
     "mongoose-auto-increment": "^5.0.1",
-    "nodemon": "^2.0.22"
+    "nodemon": "^2.0.22",
+    "react-native-onesignal": "^4.5.1"
   },
   "devDependencies": {},
   "scripts": {

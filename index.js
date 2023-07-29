@@ -4,6 +4,7 @@ const api = express()
 const bodyParser = require("body-parser")
 const mongoose = require("mongoose")
 const appData = require("./appData.json")
+const OneSignal = require("react-native-onesignal")
 
 api.use(bodyParser.json());
 
@@ -14,12 +15,21 @@ mongoose.connect(appData.api.databaseURL)
         api.listen(4000, async () => {
             console.log("🟢 | API ligada com sucesso!")
 
+            OneSignal.setAppId(appData.onesginal.appId)
+
+            OneSignal.setLogLevel(6, 0);
+            OneSignal.setRequiresUserPrivacyConsent(false);
+            OneSignal.promptForPushNotificationsWithUserResponse(response => {
+                console.log('Prompt response:', response);
+            });
+
+            OneSignal.getDeviceState()
 
             setInterval(async () => {
                 async function sendNotification(dataPush) {
                     let headers = {
                         'Content-Type': 'application/json',
-                        'Authorization': 'Basic OWQwNzJmNDMtZmU1NC00MjIwLWE4M2EtMWY1ZWMxMDE4NWUw',
+                        'Authorization': `Basic ${appData.onesginal.authorization}`,
                     }
 
                     await axios.post("https://onesignal.com/api/v1/notifications", dataPush, { headers })
@@ -195,6 +205,16 @@ var schemaMarkedTasks = new mongoose.Schema({
     }
 })
 
+var schemaDevices = new mongoose.Schema({
+    userId: String,
+    email: String,
+    profileId: Number,
+    id: {
+        type: Number,
+        default: 0
+    }
+})
+
 async function increment(next) {
     const doc = this;
     if (!doc.isNew) {
@@ -216,11 +236,13 @@ schemaTasks.pre('save', increment)
 schemaLogAlerts.pre('save', increment)
 schemaUsers.pre('save', increment)
 schemaMarkedTasks.pre('save', increment);
+schemaDevices.pre('save', increment)
 
 const modelTask = mongoose.model("Task", schemaTasks)
 const modelLogAlerts = mongoose.model("LogAlert", schemaLogAlerts)
 const modelMarkedTasks = mongoose.model('MarkedTask', schemaMarkedTasks);
 const modelUsers = mongoose.model("User", schemaUsers)
+const modelDevices = mongoose.model("Device", schemaDevices)
 
 // -------------------------------------------------------------
 
@@ -319,7 +341,7 @@ api.delete("/tasks", async (req, res) => {
     }
 
     var taskSearch = await modelTask.findOne(contentFind)
-    if(!taskSearch) {
+    if (!taskSearch) {
         return res.status(200).json(null)
     }
 
@@ -336,13 +358,13 @@ api.put("/tasks", async (req, res) => {
     if (Object.keys(contentFind).length === 0) {
         contentFind = req.query
     }
-    if(contentFind?.params) {
+    if (contentFind?.params) {
         contentFind = contentFind.params
     }
 
-    await modelTask.findOneAndUpdate({ _id: contentFind._id }, { $set: contentFind})
-    .then((data) => { res.status(200).json(data)})
-    .catch((err) => { res.status(400).json(err) })
+    await modelTask.findOneAndUpdate({ _id: contentFind._id }, { $set: contentFind })
+        .then((data) => { res.status(200).json(data) })
+        .catch((err) => { res.status(400).json(err) })
 })
 
 // |||||====||||| ------- |||||====|||||
@@ -395,7 +417,6 @@ api.get("/users", async (req, res) => {
 
 api.post("/users", async (req, res) => {
     let userData = req.body?.params
-    console.log(userData)
 
     let modeloUserData = {
         fullname: "",
@@ -514,6 +535,40 @@ api.delete("/markedtasks", async (req, res) => {
     modelMarkedTasks.deleteOne({ id: idDelete })
         .then((data) => { return res.status(200).json(data) })
         .catch((err) => { return res.status(400).json(err) })
+})
+
+// |||||====||||| ------------------ |||||====|||||
+
+// |||||====||||| tarefas concluídas |||||====|||||
+
+api.get("/devices", async (req, res) => {
+    let userData = req.query
+
+    if (userData.fullname) {
+        let userSearch = await modelUsers.findOne({ fullname: userData.fullname })
+        return res.status(200).json(userSearch)
+    } else if (userData.email) {
+        let userSearch = await modelUsers.findOne({ email: userData.email })
+        return res.status(200).json(userSearch)
+    } else {
+        return res.status(200).json(null)
+    }
+
+})
+
+api.post("/devices", async (req, res) => {
+    let deviceData = req.body
+    console.log(deviceData)
+
+    let modelSendDevice = {
+        userId: deviceData.userId,
+        email: deviceData.email || "",
+    }
+
+    new modelUsers(modelSendDevice).save()
+        .then((data) => { return res.status(200).json(data) })
+        .catch((err) => { return res.status(400).json(err) })
+
 })
 
 // |||||====||||| ------------------ |||||====|||||
