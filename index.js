@@ -531,23 +531,15 @@ api.delete("/markedtasks", async (req, res) => {
 // |||||====||||| tarefas concluídas |||||====|||||
 
 api.get("/devices", async (req, res) => {
-    let userData = req.query
-
-    if (userData.fullname) {
-        let userSearch = await modelUsers.findOne({ fullname: userData.fullname })
-        return res.status(200).json(userSearch)
-    } else if (userData.email) {
-        let userSearch = await modelUsers.findOne({ email: userData.email })
-        return res.status(200).json(userSearch)
-    } else {
-        return res.status(200).json(null)
-    }
-
+    let userData = req.body?.params
+    
+    await modelUsers.findOne(userData)
+        .then(resp => {return res.status(200).json(resp)})
+        .catch(err => {return res.status(400).json(err) })
 })
 
 api.post("/devices", async (req, res) => {
     let deviceData = req.body
-    console.log(deviceData)
 
     let modelSendDevice = {
         userId: deviceData.userId,
