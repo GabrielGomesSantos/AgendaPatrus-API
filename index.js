@@ -533,7 +533,7 @@ api.delete("/markedtasks", async (req, res) => {
 api.get("/devices", async (req, res) => {
     let userData = req.body?.params
     
-    await modelUsers.findOne(userData)
+    await modelDevices.findOne(userData)
         .then(resp => {return res.status(200).json(resp)})
         .catch(err => {return res.status(400).json(err) })
 })
