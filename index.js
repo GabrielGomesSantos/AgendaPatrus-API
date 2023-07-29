@@ -552,6 +552,20 @@ api.post("/devices", async (req, res) => {
 
 })
 
+api.put("/devices", async (req, res) => {
+    var contentFind = req.body
+    if (Object.keys(contentFind).length === 0) {
+        contentFind = req.query
+    }
+    if (contentFind?.params) {
+        contentFind = contentFind.params
+    }
+
+    await modelDevices.findOneAndUpdate({ userId: contentFind.deviceId }, { $set: contentFind })
+        .then((data) => { res.status(200).json(data) })
+        .catch((err) => { res.status(400).json(err) })
+})
+
 // |||||====||||| ------------------ |||||====|||||
 
 /*
