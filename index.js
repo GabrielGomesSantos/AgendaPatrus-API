@@ -140,7 +140,20 @@ mongoose.connect(appData.api.databaseURL)
 */
             }, 50000)
 
+            //=================================
 
+            const sendNotification = async (diasRestantesSelecionado) => {
+                let profiles = await modelUsers.find({ [settings[diasRestantesSelecionado]]: true })
+                console.log(profiles)
+
+                let tasks = await modelTask.find()
+                tasks.map((task) => {
+                    task.diasRestantes = 2
+                })
+
+                console.log(tasks)
+            }
+            sendNotification(3)
         })
 
     })
@@ -178,6 +191,44 @@ var schemaUsers = new mongoose.Schema({
     email: String,
     password: String,
     turma: String,
+    settings: {
+        pushTasksToday: {
+            type: Boolean,
+            default: true
+        },
+        pushTasks1Days: {
+            type: Boolean,
+            default: false
+        },
+        pushTasks2Days: {
+            type: Boolean,
+            default: false
+        },
+        pushTasks3Days: {
+            type: Boolean,
+            default: true
+        },
+        pushTasks4Days: {
+            type: Boolean,
+            default: false
+        },
+        pushTasks5Days: {
+            type: Boolean,
+            default: false
+        },
+        pushTasks6Days: {
+            type: Boolean,
+            default: false
+        },
+        pushTasks7Days: {
+            type: Boolean,
+            default: false
+        },
+        pushTasks10Days: {
+            type: Boolean,
+            default: false
+        },
+    },
     id: {
         type: Number,
         default: 0
