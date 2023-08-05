@@ -150,10 +150,11 @@ mongoose.connect(appData.api.databaseURL)
 
                 let tasksMongoose = await modelTask.find()
                 let tasks = []
-                tasks.map((task) => {
+                .forEach((task) => {
                     let newTask = task
                     newTask.diasRestantes = 2
                     tasks.push(newTask)
+                    return newTask
                 })
 
                 console.log(tasks)
