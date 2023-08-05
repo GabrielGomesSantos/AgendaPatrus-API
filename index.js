@@ -148,10 +148,12 @@ mongoose.connect(appData.api.databaseURL)
                 
                 console.log(profiles)
 
-                let tasks = await modelTask.find()
-                tasks = tasks.map((task) => {
-                    task.diasRestantes = 2
-                    return task
+                let tasksMongoose = await modelTask.find()
+                let tasks = []
+                tasks.map((task) => {
+                    let newTask = task
+                    newTask.diasRestantes = 2
+                    tasks.push(newTask)
                 })
 
                 console.log(tasks)
