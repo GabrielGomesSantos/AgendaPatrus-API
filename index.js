@@ -161,7 +161,7 @@ mongoose.connect(appData.api.databaseURL)
                 });
 
                 let tasksComDoc = listTasksDiasRest.filter(task => task.diasRest == diasRestantesSelecionado)
-                let tasks = tasksComDoc.map(task => tasks._doc)
+                let tasks = tasksComDoc.map(task => task._doc)
                 console.log(tasks)
 
                 /*
