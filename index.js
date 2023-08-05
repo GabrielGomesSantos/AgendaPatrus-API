@@ -144,17 +144,25 @@ mongoose.connect(appData.api.databaseURL)
 
             const sendNotification = async (diasRestantesSelecionado) => {
                 let profiles = []
+                if(diasRestantesSelecionado == 0) profiles = await modelUsers.find({ "settings.pushTasksToday": true })
+                if(diasRestantesSelecionado == 1) profiles = await modelUsers.find({ "settings.pushTasks1Days": true })
+                if(diasRestantesSelecionado == 2) profiles = await modelUsers.find({ "settings.pushTasks2Days": true })
                 if(diasRestantesSelecionado == 3) profiles = await modelUsers.find({ "settings.pushTasks3Days": true })
-                
-                console.log(profiles)
+                if(diasRestantesSelecionado == 4) profiles = await modelUsers.find({ "settings.pushTasks4Days": true })
+                if(diasRestantesSelecionado == 5) profiles = await modelUsers.find({ "settings.pushTasks5Days": true })
+                if(diasRestantesSelecionado == 6) profiles = await modelUsers.find({ "settings.pushTasks6Days": true })
+                if(diasRestantesSelecionado == 7) profiles = await modelUsers.find({ "settings.pushTasks7Days": true })
+                if(diasRestantesSelecionado == 10) profiles = await modelUsers.find({ "settings.pushTasks10Days": true })
 
-                let tasks = await modelTask.find()
-                const updatedTasks = tasks.map((task) => {
-                    task.diasRest = 2;
-                    return task;
+                let tasksAll = await modelTask.find()
+                console.log(tasksAll)
+                let listTasksDiasRest = tasksAll.map((task) => {
+                    let diasCalculados = Math.ceil((task._doc?.date - Date.now()) / (24 * 60 * 60 * 1000))
+                    return { ...task, diasRest: diasCalculados }
                 });
-                
-                console.log(updatedTasks)
+
+                let tasks = listTasksDiasRest.filter((task) => {task.diasRest == diasRestantesSelecionado})
+                console.log(tasks)
             }
             sendNotification(3)
         })
