@@ -17,20 +17,20 @@ mongoose.connect(appData.api.databaseURL)
             setInterval(async () => {
                 async function sendNotificationOneSignal(dataPush) {
                     try {
-                        
-            
+
+
                         const headers = {
                             'Content-Type': 'application/json; charset=utf-8',
                             Authorization: `Basic ${appData.onesginal.authorization}`,
                         };
-            
+
                         const data = {
                             app_id: appData.onesginal.appId,
                             include_player_ids: [],
                             headings: { "en": "Teste" },
                             contents: { "en": "DESCRIÇÃO" },
                         }
-            
+
                         const response = await axios.post('https://onesignal.com/api/v1/notifications', data, { headers });
                         console.log('Notificação enviada com sucesso!');
                         console.log(response.data);
@@ -153,15 +153,15 @@ mongoose.connect(appData.api.databaseURL)
 
             const sendNotification = async (diasRestantesSelecionado) => {
                 let profiles = []
-                if(diasRestantesSelecionado == 0) profiles = await modelUsers.find({ "settings.pushTasksToday": true })
-                if(diasRestantesSelecionado == 1) profiles = await modelUsers.find({ "settings.pushTasks1Days": true })
-                if(diasRestantesSelecionado == 2) profiles = await modelUsers.find({ "settings.pushTasks2Days": true })
-                if(diasRestantesSelecionado == 3) profiles = await modelUsers.find({ "settings.pushTasks3Days": true })
-                if(diasRestantesSelecionado == 4) profiles = await modelUsers.find({ "settings.pushTasks4Days": true })
-                if(diasRestantesSelecionado == 5) profiles = await modelUsers.find({ "settings.pushTasks5Days": true })
-                if(diasRestantesSelecionado == 6) profiles = await modelUsers.find({ "settings.pushTasks6Days": true })
-                if(diasRestantesSelecionado == 7) profiles = await modelUsers.find({ "settings.pushTasks7Days": true })
-                if(diasRestantesSelecionado == 10) profiles = await modelUsers.find({ "settings.pushTasks10Days": true })
+                if (diasRestantesSelecionado == 0) profiles = await modelUsers.find({ "settings.pushTasksToday": true })
+                if (diasRestantesSelecionado == 1) profiles = await modelUsers.find({ "settings.pushTasks1Days": true })
+                if (diasRestantesSelecionado == 2) profiles = await modelUsers.find({ "settings.pushTasks2Days": true })
+                if (diasRestantesSelecionado == 3) profiles = await modelUsers.find({ "settings.pushTasks3Days": true })
+                if (diasRestantesSelecionado == 4) profiles = await modelUsers.find({ "settings.pushTasks4Days": true })
+                if (diasRestantesSelecionado == 5) profiles = await modelUsers.find({ "settings.pushTasks5Days": true })
+                if (diasRestantesSelecionado == 6) profiles = await modelUsers.find({ "settings.pushTasks6Days": true })
+                if (diasRestantesSelecionado == 7) profiles = await modelUsers.find({ "settings.pushTasks7Days": true })
+                if (diasRestantesSelecionado == 10) profiles = await modelUsers.find({ "settings.pushTasks10Days": true })
 
                 let tasksAll = await modelTask.find()
                 let listTasksDiasRest = tasksAll.map((task) => {
@@ -172,12 +172,14 @@ mongoose.connect(appData.api.databaseURL)
                 let tasksComDoc = listTasksDiasRest.filter(task => task.diasRest == diasRestantesSelecionado)
                 let tasks = tasksComDoc.map(task => task._doc)
 
+                /*
                 let listPlayerIds = []
                 profiles.map(async (profile) => {
                     let device = await modelDevices.findOne({ email: profile.email })
                     listPlayerIds.push(device)
                 })
                 console.log(listPlayerIds)
+                */
 
                 /*
                 let devices = await modelDevices.find()
@@ -187,14 +189,59 @@ mongoose.connect(appData.api.databaseURL)
                 console.log(profilesAll)
                 */
 
-                /*
+
                 profiles.forEach(async (profile) => {
                     let tasksTurma = tasks.filter(task => task.turma === profile.turma)
-                    let playerId = s
+                    let device = await modelDevices.findOne({ email: profile.email })
+                    let playerId = device?.userId
 
+                    let text = ""
+                    let score = 0
+                    let tasksCount = 0
 
+                    tasksTurma.map((item) => {
+                        let dias = Math.ceil((item.date - Date.now()) / (24 * 60 * 60 * 1000))
+
+                        if (dias === 0) {
+                            score++
+                            tasksCount++
+                            if (score < 4) {
+                                text = text + `${score}. ${item.title};\n`
+                            }
+
+                        }
+                    })
+
+                    if (tasksCount > 3) {
+                        let newCount = tasksCount - 3
+                        text = text + `E ${newCount > 1 ? "outras" : "outra"} ${newCount} ${newCount > 1 ? "tarefas" : "tarefa"}...`
+                    }
+
+                    let headText = "🗓️ Tarefas para hoje"
+                    if(diasRestantesSelecionado != 0) {
+                        headText = `🗓️ Tarefas para daqui ${diasRestantesSelecionado} ${diasRestantesSelecionado <= 1 ? "dia" : "dias"}`
+                    }
+
+                    try {
+                        const headers = {
+                            'Content-Type': 'application/json; charset=utf-8',
+                            'Authorization': `Basic ${appData.onesginal.authorization}`,
+                        };
+                        const data = {
+                            app_id: appData.onesginal.appId,
+                            include_player_ids: [playerId],
+                            headings: { "en": headText },
+                            contents: { "en": text },
+                        }
+
+                        const response = await axios.post('https://onesignal.com/api/v1/notifications', data, { headers });
+                        console.log('Notificação enviada com sucesso!');
+                        console.log(response.data);
+                    } catch (error) {
+                        console.error('Erro ao enviar notificação:', error.message);
+                    }
                 })
-                */
+
             }
             sendNotification(3)
         })
@@ -626,10 +673,10 @@ api.delete("/markedtasks", async (req, res) => {
 
 api.get("/devices", async (req, res) => {
     let userData = req.body?.params
-    
+
     await modelDevices.findOne(userData)
-        .then(resp => {return res.status(200).json(resp)})
-        .catch(err => {return res.status(400).json(err) })
+        .then(resp => { return res.status(200).json(resp) })
+        .catch(err => { return res.status(400).json(err) })
 })
 
 api.post("/devices", async (req, res) => {
