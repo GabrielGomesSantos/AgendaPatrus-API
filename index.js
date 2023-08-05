@@ -172,7 +172,7 @@ mongoose.connect(appData.api.databaseURL)
                 let tasksComDoc = listTasksDiasRest.filter(task => task.diasRest == diasRestantesSelecionado)
                 let tasks = tasksComDoc.map(task => task._doc)
 
-                let profilesAll = profiles.map(async profile => await modelDevices.findOne({ email: profile.email }))
+                let profilesAll = profiles.map(async profile => {await modelDevices.findOne({ email: profile.email })})
                 console.log(profilesAll)
                 /*
                 profiles.forEach(async (profile) => {
