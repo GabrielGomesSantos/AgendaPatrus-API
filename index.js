@@ -169,7 +169,7 @@ mongoose.connect(appData.api.databaseURL)
                     console.log(tasksTurma)
                 })
             }
-            sendNotification(41)
+            sendNotification(3)
         })
 
     })
