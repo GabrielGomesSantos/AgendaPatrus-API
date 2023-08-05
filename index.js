@@ -150,9 +150,10 @@ mongoose.connect(appData.api.databaseURL)
 
                 let tasks = await modelTask.find()
                 const updatedTasks = tasks.map((task) => {
-                    return { ...task, diasRest: 2 };
+                    task.diasRest = 2;
+                    return task;
                 });
-
+                
                 console.log(updatedTasks)
             }
             sendNotification(3)
