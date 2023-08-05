@@ -161,7 +161,7 @@ mongoose.connect(appData.api.databaseURL)
                 });
                 console.log(listTasksDiasRest)
 
-                let tasks = listTasksDiasRest.filter((task) => {task.diasRest == diasRestantesSelecionado})
+                let tasks = listTasksDiasRest.filter(task => task.diasRest == diasRestantesSelecionado)
                 console.log(tasks)
             }
             sendNotification(3)
