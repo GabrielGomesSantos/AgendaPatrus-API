@@ -15,19 +15,28 @@ mongoose.connect(appData.api.databaseURL)
             console.log("🟢 | API ligada com sucesso!")
 
             setInterval(async () => {
-                async function sendNotification(dataPush) {
-                    let headers = {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Basic ${appData.onesginal.authorization}`,
+                async function sendNotificationOneSignal(dataPush) {
+                    try {
+                        
+            
+                        const headers = {
+                            'Content-Type': 'application/json; charset=utf-8',
+                            Authorization: `Basic ${appData.onesginal.authorization}`,
+                        };
+            
+                        const data = {
+                            app_id: appData.onesginal.appId,
+                            include_player_ids: [],
+                            headings: { "en": "Teste" },
+                            contents: { "en": "DESCRIÇÃO" },
+                        }
+            
+                        const response = await axios.post('https://onesignal.com/api/v1/notifications', data, { headers });
+                        console.log('Notificação enviada com sucesso!');
+                        console.log(response.data);
+                    } catch (error) {
+                        console.error('Erro ao enviar notificação:', error.message);
                     }
-
-                    await axios.post("https://onesignal.com/api/v1/notifications", dataPush, { headers })
-                        .then(response => {
-                            console.log('Notificação enviada com sucesso:', response.data)
-                        })
-                        .catch(error => {
-                            console.error('Erro ao enviar a notificação:', error)
-                        })
                 }
 
                 let items = await modelTask.find()
@@ -163,11 +172,16 @@ mongoose.connect(appData.api.databaseURL)
                 let tasksComDoc = listTasksDiasRest.filter(task => task.diasRest == diasRestantesSelecionado)
                 let tasks = tasksComDoc.map(task => task._doc)
 
-                profiles.forEach((profile) => {
-                    console.log(profile.fullname+" =========================")
+                let profilesAll = profiles.map(async profile => await modelDevices.findOne({ email: profile.email }))
+                console.log(profilesAll)
+                /*
+                profiles.forEach(async (profile) => {
                     let tasksTurma = tasks.filter(task => task.turma === profile.turma)
-                    console.log(tasksTurma)
+                    let playerId = 
+
+
                 })
+                */
             }
             sendNotification(3)
         })
