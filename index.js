@@ -155,11 +155,11 @@ mongoose.connect(appData.api.databaseURL)
                 if(diasRestantesSelecionado == 10) profiles = await modelUsers.find({ "settings.pushTasks10Days": true })
 
                 let tasksAll = await modelTask.find()
-                console.log(tasksAll)
                 let listTasksDiasRest = tasksAll.map((task) => {
-                    let diasCalculados = Math.ceil((task._doc?.date - Date.now()) / (24 * 60 * 60 * 1000))
+                    let diasCalculados = Math.ceil((task.date - Date.now()) / (24 * 60 * 60 * 1000))
                     return { ...task, diasRest: diasCalculados }
                 });
+                console.log(listTasksDiasRest)
 
                 let tasks = listTasksDiasRest.filter((task) => {task.diasRest == diasRestantesSelecionado})
                 console.log(tasks)
