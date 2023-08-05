@@ -162,13 +162,12 @@ mongoose.connect(appData.api.databaseURL)
 
                 let tasksComDoc = listTasksDiasRest.filter(task => task.diasRest == diasRestantesSelecionado)
                 let tasks = tasksComDoc.map(task => task._doc)
-                console.log(tasks)
 
-                /*
                 profiles.forEach((profile) => {
-                    let tasksTurma = tasks.filter(task => task.diasRest)
+                    console.log(profile.fullname+" =========================")
+                    let tasksTurma = tasks.filter(task => task.turma === profile.turma)
+                    console.log(tasksTurma)
                 })
-                */
             }
             sendNotification(41)
         })
