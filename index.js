@@ -144,7 +144,7 @@ mongoose.connect(appData.api.databaseURL)
 
             const sendNotification = async (diasRestantesSelecionado) => {
                 let profiles = []
-                if(diasRestantesSelecionado == 3) profiles = await modelUsers.find(profile => profile.settings.pushTasks3Days == true)
+                if(diasRestantesSelecionado == 3) profiles = await modelUsers.find({ settings: { pushTasks3Days: true } })
                 
                 console.log(profiles)
 
