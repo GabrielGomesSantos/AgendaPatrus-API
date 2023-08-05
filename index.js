@@ -148,16 +148,12 @@ mongoose.connect(appData.api.databaseURL)
                 
                 console.log(profiles)
 
-                let tasksMongoose = await modelTask.find()
-                let tasks = []
-                .forEach((task) => {
-                    let newTask = task
-                    newTask.diasRestantes = 2
-                    tasks.push(newTask)
-                    return newTask
-                })
+                let tasks = await modelTask.find()
+                const updatedTasks = tasks.map((task) => {
+                    return { ...task, diasRest: 2 };
+                });
 
-                console.log(tasks)
+                console.log(updatedTasks)
             }
             sendNotification(3)
         })
