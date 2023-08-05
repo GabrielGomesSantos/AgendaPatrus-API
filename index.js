@@ -174,7 +174,7 @@ mongoose.connect(appData.api.databaseURL)
 
                 let listPlayerIds = []
                 profiles.map(async (profile) => {
-                    let device = await modelDevices({ email: profile.email })
+                    let device = await modelDevices.findOne({ email: profile.email })
                     listPlayerIds.push(device)
                 })
                 console.log(listPlayerIds)
