@@ -160,8 +160,15 @@ mongoose.connect(appData.api.databaseURL)
                     return { ...task, diasRest: diasCalculados }
                 });
 
-                let tasks = listTasksDiasRest.filter(task => task.diasRest == diasRestantesSelecionado)
+                let tasksComDoc = listTasksDiasRest.filter(task => task.diasRest == diasRestantesSelecionado)
+                let tasks = tasksComDoc.map(task => tasks._doc)
                 console.log(tasks)
+
+                /*
+                profiles.forEach((profile) => {
+                    let tasksTurma = tasks.filter(task => task.diasRest)
+                })
+                */
             }
             sendNotification(41)
         })
