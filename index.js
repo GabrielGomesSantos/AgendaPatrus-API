@@ -109,44 +109,6 @@ mongoose.connect(appData.api.databaseURL)
                     }
                 }
 
-                /*
-                items.map((item) => {
-                    let dias = Math.ceil((item.date - Date.now()) / (24 * 60 * 60 * 1000))
-                    
-                                        if (dias === 3) {
-                                            const dataPush = {
-                                                app_id: appData.onesginal.appId,
-                                                included_segments: ['All'],
-                                                headings: { 'en': `${item.type} para ${item.type === "Prova" ? "estudar" : "fazer"}!` },
-                                                contents: { 'en': `${item.title} - Em ${dias} dias` },
-                                                buttons: [{
-                                                    id: "feito",
-                                                    text: "Feito!"
-                                                }]
-                                            }
-                    
-                                            sendNotification(dataPush)
-                    
-                                        }
-                    
-                                        if (dias === 7) {
-                                            const dataPush = {
-                                                app_id: appData.onesginal.appId,
-                                                included_segments: ['All'],
-                                                headings: { 'en': `${item.type} para ${item.type === "Prova" ? "estudar" : "fazer"}!` },
-                                                contents: { 'en': `${item.title} - Em ${dias} dias` },
-                                                buttons: [{
-                                                    id: "feito",
-                                                    text: "Feito!"
-                                                }]
-                                            }
-                    
-                                            sendNotification(dataPush)
-                    
-                                        }
-                    
-                })
-*/
             }, 50000)
 
             //=================================
@@ -194,7 +156,6 @@ mongoose.connect(appData.api.databaseURL)
                     let tasksTurma = tasks.filter(task => task.turma === profile.turma)
                     let device = await modelDevices.findOne({ email: profile.email })
                     let playerId = device?.userId
-                    console.log(tasksTurma)
 
                     let text = ""
                     let score = 0
@@ -203,7 +164,6 @@ mongoose.connect(appData.api.databaseURL)
                     tasksTurma.map((item) => {
                         score++
                         tasksCount++
-                        console.log(item)
                         if (score < 4) {
                             text = text + `${score}. ${item.title};\n`
                         }
@@ -224,8 +184,6 @@ mongoose.connect(appData.api.databaseURL)
                             'Content-Type': 'application/json; charset=utf-8',
                             'Authorization': `Basic ${appData.onesginal.authorization}`,
                         };
-
-                        console.log(text)
 
                         const data = {
                             app_id: appData.onesginal.appId,
@@ -673,6 +631,7 @@ api.delete("/markedtasks", async (req, res) => {
 
 api.get("/devices", async (req, res) => {
     let userData = req.body?.params
+    console.log(userData)
 
     await modelDevices.findOne(userData)
         .then(resp => { return res.status(200).json(resp) })
