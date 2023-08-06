@@ -155,6 +155,7 @@ mongoose.connect(appData.api.databaseURL)
 
 
                 profiles.forEach(async (profile) => {
+                    console.log("PASSANDO POR FUNÇÃO A ENVIAR UMA NOTIFICAÇÃO")
                     let tasksTurma = tasks.filter(task => task.turma === profile.turma)
                     let device = await modelDevices.findOne({ email: profile.email })
                     let playerId = device?.userId
@@ -204,7 +205,7 @@ mongoose.connect(appData.api.databaseURL)
 
             }
 
-            /*
+            
             setInterval(() => {
                 let dateNow = new Date()
                 console.log(`HORAS: ${dateNow.getHours()}`)
@@ -220,7 +221,8 @@ mongoose.connect(appData.api.databaseURL)
                 if (dateNow.getHours() === 22) sendNotification(7) // 10h
                 if (dateNow.getHours() === 23) sendNotification(10) // 20h
             }, 50000)
-            */
+            
+            sendNotification(2)
 
             //  A CADA VERIFICAÇÃO DOS 50 SEGUNDOS ELE ENVIA A NOTIGICÃO MESMO SE JA ENVIOU
             //  SEMPRE QUE HOUVER MAIS DE 1 TAREFA PARA CITAR ELE ENVIA COM A NOTIFICAÇÃO COM A MENSAGEM
