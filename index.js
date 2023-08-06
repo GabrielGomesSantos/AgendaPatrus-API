@@ -159,6 +159,7 @@ mongoose.connect(appData.api.databaseURL)
                     let tasksTurma = tasks.filter(task => task.turma === profile.turma)
                     let device = await modelDevices.findOne({ email: profile.email })
                     let playerId = device?.userId
+                    console.log("ENVIANDO PARA: " + playerId)
 
                     let text = ""
                     let score = 0
@@ -182,35 +183,31 @@ mongoose.connect(appData.api.databaseURL)
                         headText = `🗓️ Tarefas para daqui ${diasRestantesSelecionado} ${diasRestantesSelecionado <= 1 ? "dia" : "dias"}`
                     }
 
-                    try {
-                        const headers = {
-                            'Content-Type': 'application/json; charset=utf-8',
-                            'Authorization': `Basic ${appData.onesginal.authorization}`,
-                        };
+                    const headers = {
+                        'Content-Type': 'application/json; charset=utf-8',
+                        'Authorization': `Basic ${appData.onesginal.authorization}`,
+                    };
 
-                        const data = {
-                            app_id: appData.onesginal.appId,
-                            include_player_ids: [playerId],
-                            headings: { "en": headText },
-                            contents: { "en": text },
-                        }
-
-                        const response = await axios.post('https://onesignal.com/api/v1/notifications', data, { headers });
-                        console.log('Notificação enviada com sucesso!');
-                        console.log(response.data);
-                    } catch (error) {
-                        console.error('Erro ao enviar notificação:', error.message);
+                    const data = {
+                        app_id: appData.onesginal.appId,
+                        include_player_ids: [playerId],
+                        headings: { "en": headText },
+                        contents: { "en": text },
                     }
+
+                    axios.post('https://onesignal.com/api/v1/notifications', data, { headers })
+                        .then((respon) => console.log(respon.data))
+                        .catch((error) => console.error('Erro ao enviar notificação:', error.message))
                 })
 
             }
 
-            
+
             setInterval(() => {
                 let dateNow = new Date()
                 console.log(`HORAS: ${dateNow.getHours()}`)
 
-                if (dateNow.getHours() === 7)  sendNotification(0) // 04h
+                if (dateNow.getHours() === 7) sendNotification(0) // 04h
 
                 if (dateNow.getHours() === 16) sendNotification(1) // 13h
                 if (dateNow.getHours() === 17) sendNotification(2) // 14h
@@ -221,7 +218,7 @@ mongoose.connect(appData.api.databaseURL)
                 if (dateNow.getHours() === 22) sendNotification(7) // 10h
                 if (dateNow.getHours() === 23) sendNotification(10) // 20h
             }, 50000)
-            
+
             sendNotification(2)
 
             //  A CADA VERIFICAÇÃO DOS 50 SEGUNDOS ELE ENVIA A NOTIGICÃO MESMO SE JA ENVIOU
