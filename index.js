@@ -14,6 +14,7 @@ mongoose.connect(appData.api.databaseURL)
         api.listen(4000, async () => {
             console.log("🟢 | API ligada com sucesso!")
 
+            /*
             setInterval(async () => {
                 async function sendNotificationOneSignal(dataPush) {
                     try {
@@ -110,6 +111,7 @@ mongoose.connect(appData.api.databaseURL)
                 }
 
             }, 50000)
+            */
 
             //=================================
 
@@ -165,7 +167,7 @@ mongoose.connect(appData.api.databaseURL)
                         score++
                         tasksCount++
                         if (score < 4) {
-                            text = text + `${score}. ${item.title};\n`
+                            text = text + `\n${score}. ${item.title};`
                         }
                     })
 
@@ -201,7 +203,25 @@ mongoose.connect(appData.api.databaseURL)
                 })
 
             }
-            sendNotification(2)
+
+            setInterval(() => {
+                let dateNow = new Date()
+
+                if (dateNow.getHours() === 4)  sendNotification(0)
+
+                if (dateNow.getHours() === 14) sendNotification(1)
+                if (dateNow.getHours() === 15) sendNotification(2)
+                if (dateNow.getHours() === 16) sendNotification(3)
+                if (dateNow.getHours() === 17) sendNotification(4)
+                if (dateNow.getHours() === 18) sendNotification(5)
+                if (dateNow.getHours() === 19) sendNotification(6)
+                if (dateNow.getHours() === 20) sendNotification(7)
+                if (dateNow.getHours() === 21) sendNotification(10)
+            }, 50000)
+
+            //  SEMPRE QUE HOUVER MAIS DE 1 TAREFA PARA CITAR ELE ENVIA COM A NOTIFICAÇÃO COM A MENSAGEM
+            //  MAIS DE UMA VEZ (NO CASO NA QUANTIDADE DA TAREFAS CITADAS)
+            //sendNotification(2)
         })
 
     })
@@ -631,8 +651,7 @@ api.delete("/markedtasks", async (req, res) => {
 
 api.get("/devices", async (req, res) => {
     let resp = await modelDevices.find()
-    console.log(resp)
-    
+
     return res.status(200).json(resp)
 })
 
