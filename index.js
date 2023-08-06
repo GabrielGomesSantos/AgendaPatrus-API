@@ -204,25 +204,27 @@ mongoose.connect(appData.api.databaseURL)
 
             }
 
+            /*
             setInterval(() => {
                 let dateNow = new Date()
                 console.log(`HORAS: ${dateNow.getHours()}`)
 
-                if (dateNow.getHours() === 4)  sendNotification(0)
+                if (dateNow.getHours() === 7)  sendNotification(0) // 04h
 
-                if (dateNow.getHours() === 14) sendNotification(1)
-                if (dateNow.getHours() === 15) sendNotification(2)
-                if (dateNow.getHours() === 16) sendNotification(3)
-                if (dateNow.getHours() === 17) sendNotification(4)
-                if (dateNow.getHours() === 18) sendNotification(5)
-                if (dateNow.getHours() === 19) sendNotification(6)
-                if (dateNow.getHours() === 20) sendNotification(7)
-                if (dateNow.getHours() === 21) sendNotification(10)
+                if (dateNow.getHours() === 16) sendNotification(1) // 13h
+                if (dateNow.getHours() === 17) sendNotification(2) // 14h
+                if (dateNow.getHours() === 18) sendNotification(3) // 15h
+                if (dateNow.getHours() === 19) sendNotification(4) // 16h
+                if (dateNow.getHours() === 20) sendNotification(5) // 17h
+                if (dateNow.getHours() === 21) sendNotification(6) // 18h
+                if (dateNow.getHours() === 22) sendNotification(7) // 10h
+                if (dateNow.getHours() === 23) sendNotification(10) // 20h
             }, 50000)
+            */
 
+            //  A CADA VERIFICAÇÃO DOS 50 SEGUNDOS ELE ENVIA A NOTIGICÃO MESMO SE JA ENVIOU
             //  SEMPRE QUE HOUVER MAIS DE 1 TAREFA PARA CITAR ELE ENVIA COM A NOTIFICAÇÃO COM A MENSAGEM
             //  MAIS DE UMA VEZ (NO CASO NA QUANTIDADE DA TAREFAS CITADAS)
-            //sendNotification(2)
         })
 
     })
