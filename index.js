@@ -194,7 +194,7 @@ mongoose.connect(appData.api.databaseURL)
                     let tasksTurma = tasks.filter(task => task.turma === profile.turma)
                     let device = await modelDevices.findOne({ email: profile.email })
                     let playerId = device?.userId
-                    console.log(playerId)
+                    console.log(tasksTurma)
 
                     let text = ""
                     let score = 0
@@ -243,7 +243,7 @@ mongoose.connect(appData.api.databaseURL)
                 })
 
             }
-            sendNotification(3)
+            sendNotification(2)
         })
 
     })
