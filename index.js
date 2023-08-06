@@ -203,6 +203,7 @@ mongoose.connect(appData.api.databaseURL)
                     tasksTurma.map((item) => {
                         score++
                         tasksCount++
+                        console.log(item)
                         if (score < 4) {
                             text = text + `${score}. ${item.title};\n`
                         }
@@ -224,7 +225,6 @@ mongoose.connect(appData.api.databaseURL)
                             'Authorization': `Basic ${appData.onesginal.authorization}`,
                         };
 
-                        console.log(headText)
                         console.log(text)
 
                         const data = {
