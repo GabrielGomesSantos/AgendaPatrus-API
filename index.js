@@ -630,12 +630,10 @@ api.delete("/markedtasks", async (req, res) => {
 // |||||====||||| tarefas concluídas |||||====|||||
 
 api.get("/devices", async (req, res) => {
-    let userData = req.body?.params
-    console.log(userData)
-
-    await modelDevices.findOne(userData)
-        .then(resp => { return res.status(200).json(resp) })
-        .catch(err => { return res.status(400).json(err) })
+    let resp = await modelDevices.find()
+    console.log(resp)
+    
+    return res.status(200).json(resp)
 })
 
 api.post("/devices", async (req, res) => {
