@@ -224,6 +224,9 @@ mongoose.connect(appData.api.databaseURL)
                             'Authorization': `Basic ${appData.onesginal.authorization}`,
                         };
 
+                        console.log(headText)
+                        console.log(text)
+
                         const data = {
                             app_id: appData.onesginal.appId,
                             include_player_ids: [playerId],
