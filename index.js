@@ -206,6 +206,7 @@ mongoose.connect(appData.api.databaseURL)
 
             setInterval(() => {
                 let dateNow = new Date()
+                console.log(`HORAS: ${dateNow.getHours()}`)
 
                 if (dateNow.getHours() === 4)  sendNotification(0)
 
