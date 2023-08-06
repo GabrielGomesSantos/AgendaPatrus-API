@@ -201,15 +201,10 @@ mongoose.connect(appData.api.databaseURL)
                     let tasksCount = 0
 
                     tasksTurma.map((item) => {
-                        let dias = Math.ceil((item.date - Date.now()) / (24 * 60 * 60 * 1000))
-
-                        if (dias === 0) {
-                            score++
-                            tasksCount++
-                            if (score < 4) {
-                                text = text + `${score}. ${item.title};\n`
-                            }
-
+                        score++
+                        tasksCount++
+                        if (score < 4) {
+                            text = text + `${score}. ${item.title};\n`
                         }
                     })
 
@@ -219,7 +214,7 @@ mongoose.connect(appData.api.databaseURL)
                     }
 
                     let headText = "🗓️ Tarefas para hoje"
-                    if(diasRestantesSelecionado != 0) {
+                    if (diasRestantesSelecionado != 0) {
                         headText = `🗓️ Tarefas para daqui ${diasRestantesSelecionado} ${diasRestantesSelecionado <= 1 ? "dia" : "dias"}`
                     }
 
@@ -228,13 +223,12 @@ mongoose.connect(appData.api.databaseURL)
                             'Content-Type': 'application/json; charset=utf-8',
                             'Authorization': `Basic ${appData.onesginal.authorization}`,
                         };
-                        //  ERRO: Verificar se o dado de "appData.onesginal.authorization" e "appData.onesginal.appId"
-                        //  Estão corretos no arquivo da API
+
                         const data = {
                             app_id: appData.onesginal.appId,
                             include_player_ids: [playerId],
-                            headings: { "en": "headText" },
-                            contents: { "en": "text" },
+                            headings: { "en": headText },
+                            contents: { "en": text },
                         }
 
                         const response = await axios.post('https://onesignal.com/api/v1/notifications', data, { headers });
