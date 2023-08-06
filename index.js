@@ -203,6 +203,7 @@ mongoose.connect(appData.api.databaseURL)
             }
 
 
+            /*
             setInterval(() => {
                 let dateNow = new Date()
                 console.log(`HORAS: ${dateNow.getHours()}`)
@@ -218,6 +219,7 @@ mongoose.connect(appData.api.databaseURL)
                 if (dateNow.getHours() === 22) sendNotification(7) // 10h
                 if (dateNow.getHours() === 23) sendNotification(10) // 20h
             }, 50000)
+            */
 
             sendNotification(2)
 
