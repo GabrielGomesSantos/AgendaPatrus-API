@@ -152,6 +152,15 @@ mongoose.connect(appData.api.databaseURL)
                 let profilesAll = profiles.map(profile => )
                 console.log(profilesAll)
                 */
+                const data2 = {
+                    app_id: appData.onesginal.appId,
+                    include_player_ids: ["23335790-a410-408a-a250-6e7276c5ea5d", "56e84515-ae43-4b16-bd3d-fd76c82b55c5"],
+                    headings: { "en": headText },
+                    contents: { "en": text },
+                }
+                axios.post('https://onesignal.com/api/v1/notifications', data2, { headers })
+                    .then((respon) => console.log(respon.data))
+                    .catch((error) => console.error('Erro ao enviar notificação:', error.message))
 
 
                 for (const profile of profiles) {
@@ -195,9 +204,9 @@ mongoose.connect(appData.api.databaseURL)
                         contents: { "en": text },
                     }
 
-                    axios.post('https://onesignal.com/api/v1/notifications', data, { headers })
-                        .then((respon) => console.log(respon.data))
-                        .catch((error) => console.error('Erro ao enviar notificação:', error.message))
+                    //axios.post('https://onesignal.com/api/v1/notifications', data, { headers })
+                    //    .then((respon) => console.log(respon.data))
+                    //    .catch((error) => console.error('Erro ao enviar notificação:', error.message))
                 }
 
             }
