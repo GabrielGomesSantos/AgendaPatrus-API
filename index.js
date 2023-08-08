@@ -200,8 +200,8 @@ mongoose.connect(appData.api.databaseURL)
                     const data = {
                         app_id: appData.onesginal.appId,
                         include_player_ids: [playerId],
-                        headings: { "en": headText },
-                        contents: { "en": text },
+                        headings: { "en": "Testetitle" },
+                        contents: { "en": "testeText" },
                     }
 
                     //axios.post('https://onesignal.com/api/v1/notifications', data, { headers })
