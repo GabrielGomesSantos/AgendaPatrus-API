@@ -225,14 +225,15 @@ mongoose.connect(appData.api.databaseURL)
                 let dateNow = new Date()
                 console.log(`HORAS: ${dateNow.getHours()}:${dateNow.getMinutes()}`)
 
-                if (dateNow.getHours() === 23 && dateNow.getMinutes() === 9) {
+                if (dateNow.getHours() === 23 && dateNow.getMinutes() === 17) {
                     const milliseconds = Date.now()
-                            const days = milliseconds / (24 * 60 * 60 * 1000)
-                            let day = Math.floor(days)
+                    const days = milliseconds / (24 * 60 * 60 * 1000)
+                    let day = Math.floor(days)
 
                     let pastAlertVerify = await modelLogAlerts.findOne({ name: "teste" })
-                    console.log(pastAlertVerify?.value+" - "+day)
-                    if(pastAlertVerify && pastAlertVerify.value === day) {
+                    console.log(pastAlertVerify?.value + " - " + day)
+
+                    if (pastAlertVerify && pastAlertVerify.value === day) {
                         return console.log("JÁ FOI NOTIFICADO HOJE!")
                     }
 
@@ -247,17 +248,23 @@ mongoose.connect(appData.api.databaseURL)
                         contents: { "en": "text" },
                     }
                     axios.post('https://onesignal.com/api/v1/notifications', data2, { headers })
-                        .then((respon) => {
+                        .then(async(respon) => {
                             console.log(respon.data)
                             const milliseconds = Date.now()
                             const days = milliseconds / (24 * 60 * 60 * 1000)
                             let day = Math.floor(days)
 
-                            new modelLogAlerts({
-                                name: "teste",
-                                type: "perDay",
-                                value: day
-                            }).save()
+                            if (pastAlertVerify) {
+                                await modelLogAlerts.findOneAndUpdate({ name: "teste" }, { $set: { value: day }})
+                            } else {
+                                new modelLogAlerts({
+                                    name: "teste",
+                                    type: "perDay",
+                                    value: day
+                                }).save()
+                            }
+
+
                         })
                         .catch((error) => console.error('Erro ao enviar notificação:', error.message))
                 }
