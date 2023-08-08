@@ -13,9 +13,9 @@ const headers = {
 };
 const data2 = {
     app_id: appData.onesginal.appId,
-    include_player_ids: ["23335790-a410-408a-a250-6e7276c5ea5d", "56e84515-ae43-4b16-bd3d-fd76c82b55c5"],
-    headings: { "en": "Testetitle" },
-    contents: { "en": "text" },
+    include_player_ids: ["56e84515-ae43-4b16-bd3d-fd76c82b55c5"],
+    headings: { "en": "MAIS UM TESTE" },
+    contents: { "en": "textUAI" },
 }
 axios.post('https://onesignal.com/api/v1/notifications', data2, { headers })
     .then((respon) => console.log(respon.data))
