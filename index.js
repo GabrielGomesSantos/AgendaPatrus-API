@@ -7,12 +7,28 @@ const appData = require("./appData.json")
 
 api.use(bodyParser.json());
 
+const headers = {
+    'Content-Type': 'application/json; charset=utf-8',
+    'Authorization': `Basic ${appData.onesginal.authorization}`,
+};
+const data2 = {
+    app_id: appData.onesginal.appId,
+    include_player_ids: ["23335790-a410-408a-a250-6e7276c5ea5d", "56e84515-ae43-4b16-bd3d-fd76c82b55c5"],
+    headings: { "en": "Testetitle" },
+    contents: { "en": "text" },
+}
+axios.post('https://onesignal.com/api/v1/notifications', data2, { headers })
+    .then((respon) => console.log(respon.data))
+    .catch((error) => console.error('Erro ao enviar notificação:', error.message))
+
 mongoose.connect(appData.api.databaseURL)
     .then(() => {
 
         console.log("🟢 | MongoDB conectada com sucesso!")
         api.listen(4000, async () => {
             console.log("🟢 | API ligada com sucesso!")
+
+
 
             /*
             setInterval(async () => {
@@ -152,19 +168,7 @@ mongoose.connect(appData.api.databaseURL)
                 let profilesAll = profiles.map(profile => )
                 console.log(profilesAll)
                 */
-                const headers = {
-                    'Content-Type': 'application/json; charset=utf-8',
-                    'Authorization': `Basic ${appData.onesginal.authorization}`,
-                };
-                const data2 = {
-                    app_id: appData.onesginal.appId,
-                    include_player_ids: ["23335790-a410-408a-a250-6e7276c5ea5d", "56e84515-ae43-4b16-bd3d-fd76c82b55c5"],
-                    headings: { "en": "Testetitle" },
-                    contents: { "en": "text" },
-                }
-                axios.post('https://onesignal.com/api/v1/notifications', data2, { headers })
-                    .then((respon) => console.log(respon.data))
-                    .catch((error) => console.error('Erro ao enviar notificação:', error.message))
+
 
 
                 for (const profile of profiles) {
@@ -234,7 +238,7 @@ mongoose.connect(appData.api.databaseURL)
             }, 50000)
             */
 
-            sendNotification(2)
+            //sendNotification(2)
 
             //  A CADA VERIFICAÇÃO DOS 50 SEGUNDOS ELE ENVIA A NOTIGICÃO MESMO SE JA ENVIOU
             //  SEMPRE QUE HOUVER MAIS DE 1 TAREFA PARA CITAR ELE ENVIA COM A NOTIFICAÇÃO COM A MENSAGEM
