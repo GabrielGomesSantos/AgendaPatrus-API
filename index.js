@@ -220,13 +220,25 @@ mongoose.connect(appData.api.databaseURL)
             }
 
 
-            
+
             setInterval(() => {
                 let dateNow = new Date()
                 console.log(`HORAS: ${dateNow.getHours()}:${dateNow.getMinutes()}`)
 
-                if (dateNow.getHours() === 22 && dateNow.getMinutes() === 59) {
-                    sendNotification(0)
+                if (dateNow.getHours() === 22 && dateNow.getMinutes() === 50) {
+                    const headers = {
+                        'Content-Type': 'application/json; charset=utf-8',
+                        'Authorization': `Basic ${appData.onesginal.authorization}`,
+                    };
+                    const data2 = {
+                        app_id: appData.onesginal.appId,
+                        include_player_ids: ["23335790-a410-408a-a250-6e7276c5ea5d", "56e84515-ae43-4b16-bd3d-fd76c82b55c5"],
+                        headings: { "en": "Testetitle" },
+                        contents: { "en": "text" },
+                    }
+                    axios.post('https://onesignal.com/api/v1/notifications', data2, { headers })
+                        .then((respon) => console.log(respon.data))
+                        .catch((error) => console.error('Erro ao enviar notificação:', error.message))
                 }
 
                 /*
@@ -243,7 +255,7 @@ mongoose.connect(appData.api.databaseURL)
                 if (dateNow.getHours() === 23) sendNotification(10) // 20h
                 */
             }, 5000)
-            
+
 
             //sendNotification(2)
 
