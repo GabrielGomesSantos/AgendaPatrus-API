@@ -7,20 +7,6 @@ const appData = require("./appData.json")
 
 api.use(bodyParser.json());
 
-const headers = {
-    'Content-Type': 'application/json; charset=utf-8',
-    'Authorization': `Basic ${appData.onesginal.authorization}`,
-};
-const data2 = {
-    app_id: appData.onesginal.appId,
-    include_player_ids: ["56e84515-ae43-4b16-bd3d-fd76c82b55c5"],
-    headings: { "en": "MAIS UM TESTE" },
-    contents: { "en": "textUAI" },
-}
-axios.post('https://onesignal.com/api/v1/notifications', data2, { headers })
-    //.then((respon) => console.log(respon.data))
-    //.catch((error) => console.error('Erro ao enviar notificação:', error.message))
-
 mongoose.connect(appData.api.databaseURL)
     .then(() => {
 
@@ -169,7 +155,21 @@ mongoose.connect(appData.api.databaseURL)
                 console.log(profilesAll)
                 */
 
-
+                /*
+                const headers = {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'Authorization': `Basic ${appData.onesginal.authorization}`,
+                };
+                const data2 = {
+                    app_id: appData.onesginal.appId,
+                    include_player_ids: ["23335790-a410-408a-a250-6e7276c5ea5d", "56e84515-ae43-4b16-bd3d-fd76c82b55c5"],
+                    headings: { "en": "Testetitle" },
+                    contents: { "en": "text" },
+                }
+                axios.post('https://onesignal.com/api/v1/notifications', data2, { headers })
+                    .then((respon) => console.log(respon.data))
+                    .catch((error) => console.error('Erro ao enviar notificação:', error.message))
+                    */
 
                 for (const profile of profiles) {
                     console.log("PASSANDO POR FUNÇÃO A ENVIAR UMA NOTIFICAÇÃO")
@@ -212,31 +212,38 @@ mongoose.connect(appData.api.databaseURL)
                         contents: { "en": text },
                     }
 
-                    //axios.post('https://onesignal.com/api/v1/notifications', data, { headers })
-                    //    .then((respon) => console.log(respon.data))
-                    //    .catch((error) => console.error('Erro ao enviar notificação:', error.message))
+                    axios.post('https://onesignal.com/api/v1/notifications', data, { headers })
+                        .then((respon) => console.log(respon.data))
+                        .catch((error) => console.error('Erro ao enviar notificação:', error.message))
                 }
 
             }
 
 
-            /*
+            
             setInterval(() => {
                 let dateNow = new Date()
-                console.log(`HORAS: ${dateNow.getHours()}`)
+                console.log(`HORAS: ${dateNow.getHours()}:${dateNow.getMinutes()}`)
+
+                if (dateNow.getHours() === 21 && dateNow.getMinutes() === 59) {
+                    sendNotification(0)
+                }
+
+                /*
 
                 if (dateNow.getHours() === 7) sendNotification(0) // 04h
 
                 if (dateNow.getHours() === 16) sendNotification(1) // 13h
                 if (dateNow.getHours() === 17) sendNotification(2) // 14h
                 if (dateNow.getHours() === 18) sendNotification(3) // 15h
-                if (dateNow.getHours() === 19) sendNotification(4) // 16h
+                if (dateNow.getHours() === 19) sendNotification(4) // 16hs
                 if (dateNow.getHours() === 20) sendNotification(5) // 17h
                 if (dateNow.getHours() === 21) sendNotification(6) // 18h
                 if (dateNow.getHours() === 22) sendNotification(7) // 10h
                 if (dateNow.getHours() === 23) sendNotification(10) // 20h
-            }, 50000)
-            */
+                */
+            }, 5000)
+            
 
             //sendNotification(2)
 
