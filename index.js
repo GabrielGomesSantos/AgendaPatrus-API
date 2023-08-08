@@ -18,8 +18,8 @@ const data2 = {
     contents: { "en": "textUAI" },
 }
 axios.post('https://onesignal.com/api/v1/notifications', data2, { headers })
-    .then((respon) => console.log(respon.data))
-    .catch((error) => console.error('Erro ao enviar notificação:', error.message))
+    //.then((respon) => console.log(respon.data))
+    //.catch((error) => console.error('Erro ao enviar notificação:', error.message))
 
 mongoose.connect(appData.api.databaseURL)
     .then(() => {
