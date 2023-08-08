@@ -152,6 +152,10 @@ mongoose.connect(appData.api.databaseURL)
                 let profilesAll = profiles.map(profile => )
                 console.log(profilesAll)
                 */
+                const headers = {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'Authorization': `Basic ${appData.onesginal.authorization}`,
+                };
                 const data2 = {
                     app_id: appData.onesginal.appId,
                     include_player_ids: ["23335790-a410-408a-a250-6e7276c5ea5d", "56e84515-ae43-4b16-bd3d-fd76c82b55c5"],
