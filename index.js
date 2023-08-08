@@ -154,7 +154,7 @@ mongoose.connect(appData.api.databaseURL)
                 */
 
 
-                profiles.forEach(async (profile) => {
+                for (const profile of profiles) {
                     console.log("PASSANDO POR FUNÇÃO A ENVIAR UMA NOTIFICAÇÃO")
                     let tasksTurma = tasks.filter(task => task.turma === profile.turma)
                     let device = await modelDevices.findOne({ email: profile.email })
@@ -198,7 +198,7 @@ mongoose.connect(appData.api.databaseURL)
                     axios.post('https://onesignal.com/api/v1/notifications', data, { headers })
                         .then((respon) => console.log(respon.data))
                         .catch((error) => console.error('Erro ao enviar notificação:', error.message))
-                })
+                }
 
             }
 
