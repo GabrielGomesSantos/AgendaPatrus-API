@@ -225,7 +225,7 @@ mongoose.connect(appData.api.databaseURL)
                 let dateNow = new Date()
                 console.log(`HORAS: ${dateNow.getHours()}:${dateNow.getMinutes()}`)
 
-                if (dateNow.getHours() === 21 && dateNow.getMinutes() === 59) {
+                if (dateNow.getHours() === 22 && dateNow.getMinutes() === 59) {
                     sendNotification(0)
                 }
 
