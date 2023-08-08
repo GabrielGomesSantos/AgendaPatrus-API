@@ -221,11 +221,21 @@ mongoose.connect(appData.api.databaseURL)
 
 
 
-            setInterval(() => {
+            setInterval(async () => {
                 let dateNow = new Date()
                 console.log(`HORAS: ${dateNow.getHours()}:${dateNow.getMinutes()}`)
 
-                if (dateNow.getHours() === 22 && dateNow.getMinutes() === 50) {
+                if (dateNow.getHours() === 23 && dateNow.getMinutes() === 9) {
+                    const milliseconds = Date.now()
+                            const days = milliseconds / (24 * 60 * 60 * 1000)
+                            let day = Math.floor(days)
+
+                    let pastAlertVerify = await modelLogAlerts.findOne({ name: "teste" })
+                    console.log(pastAlertVerify?.value+" - "+day)
+                    if(pastAlertVerify && pastAlertVerify.value === day) {
+                        return console.log("JÁ FOI NOTIFICADO HOJE!")
+                    }
+
                     const headers = {
                         'Content-Type': 'application/json; charset=utf-8',
                         'Authorization': `Basic ${appData.onesginal.authorization}`,
@@ -237,7 +247,18 @@ mongoose.connect(appData.api.databaseURL)
                         contents: { "en": "text" },
                     }
                     axios.post('https://onesignal.com/api/v1/notifications', data2, { headers })
-                        .then((respon) => console.log(respon.data))
+                        .then((respon) => {
+                            console.log(respon.data)
+                            const milliseconds = Date.now()
+                            const days = milliseconds / (24 * 60 * 60 * 1000)
+                            let day = Math.floor(days)
+
+                            new modelLogAlerts({
+                                name: "teste",
+                                type: "perDay",
+                                value: day
+                            }).save()
+                        })
                         .catch((error) => console.error('Erro ao enviar notificação:', error.message))
                 }
 
@@ -287,7 +308,9 @@ var schemaTasks = new mongoose.Schema({
 })
 
 var schemaLogAlerts = new mongoose.Schema({
-    day: Number,
+    name: String,
+    value: Number,
+    type: String,
     id: {
         type: Number,
         default: 0
