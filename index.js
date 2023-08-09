@@ -132,19 +132,6 @@ mongoose.connect(appData.api.databaseURL)
                 let profiles = []
                 if (diasRestantesSelecionado == 0) profiles = await modelUsers.find({ "settings.pushTasksToday": true })
                 if (diasRestantesSelecionado > 0) profiles = await modelUsers.find({ [settingsFind]: true })
-                console.log(profiles)
-
-                /*
-                if (diasRestantesSelecionado == 0) profiles = await modelUsers.find({ "settings.pushTasksToday": true })
-                if (diasRestantesSelecionado == 1) profiles = await modelUsers.find({ "settings.pushTasks1Days": true })
-                if (diasRestantesSelecionado == 2) profiles = await modelUsers.find({ "settings.pushTasks2Days": true })
-                if (diasRestantesSelecionado == 3) profiles = await modelUsers.find({ "settings.pushTasks3Days": true })
-                if (diasRestantesSelecionado == 4) profiles = await modelUsers.find({ "settings.pushTasks4Days": true })
-                if (diasRestantesSelecionado == 5) profiles = await modelUsers.find({ "settings.pushTasks5Days": true })
-                if (diasRestantesSelecionado == 6) profiles = await modelUsers.find({ "settings.pushTasks6Days": true })
-                if (diasRestantesSelecionado == 7) profiles = await modelUsers.find({ "settings.pushTasks7Days": true })
-                if (diasRestantesSelecionado == 10) profiles = await modelUsers.find({ "settings.pushTasks10Days": true })
-*/
 
                 let tasksAll = await modelTask.find()
                 let listTasksDiasRest = tasksAll.map((task) => {
@@ -199,7 +186,7 @@ mongoose.connect(appData.api.databaseURL)
                     let score = 0
                     let tasksCount = 0
 
-                    tasksTurma.map((item) => {
+                    tasksTurma.map((item, index) => {
                         score++
                         tasksCount++
                         if (score < 4) {
