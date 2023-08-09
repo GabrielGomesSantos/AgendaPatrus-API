@@ -121,7 +121,7 @@ mongoose.connect(appData.api.databaseURL)
 
                 //sendNotification(0)
 
-                if (horas === 4 && minutos < 3) sendNotification(0) // 04h
+                if (horas === 4 && minutos < 59) sendNotification(0) // 04h
 
                 if (horas === 13 && minutos < 3) sendNotification(1) // 13h
                 if (horas === 14 && minutos < 3) sendNotification(2) // 14h
