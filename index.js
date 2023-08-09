@@ -13,7 +13,7 @@ mongoose.connect(appData.api.databaseURL)
         console.log("🟢 | MongoDB conectada com sucesso!")
         api.listen(4000, async () => {
             console.log("🟢 | API ligada com sucesso!")
-            startNotifications()
+            setInterval(startNotifications, 1000 * 60 * 60)
 
             const sendNotification = async (diasRestantesSelecionado) => {
                 const milliseconds = Date.now()
@@ -45,7 +45,7 @@ mongoose.connect(appData.api.databaseURL)
                     let device = await modelDevices.findOne({ email: profile.email })
                     let playerId = device?.userId
 
-                    if(!tasksTurma[0]) return console.log(`Nenhuma tarefa para ${diasRestantesSelecionado} dias restantes | Nenhuma notificação enviada!`)
+                    if (!tasksTurma[0]) return console.log(`Nenhuma tarefa para ${diasRestantesSelecionado} dias restantes | Nenhuma notificação enviada!`)
 
                     let text = ""
                     let score = 0
@@ -56,10 +56,10 @@ mongoose.connect(appData.api.databaseURL)
                         tasksCount++
                         if (score < 4) {
                             let icon = ""
-                            if(item.type == "Atividade") icon = "🔵 "
-                            if(item.type == "Trabalho") icon = "🟡 "
-                            if(item.type == "Prova") icon = "🔴 "
-                            if(item.type == "Outro") icon = "⚪ "
+                            if (item.type == "Atividade") icon = "🔵 "
+                            if (item.type == "Trabalho") icon = "🟡 "
+                            if (item.type == "Prova") icon = "🔴 "
+                            if (item.type == "Outro") icon = "⚪ "
                             text = text + `${score}. ${icon}${item.title};`
                             if (index < tasksTurma.length - 1) {
                                 text = text + "\n" // Adiciona quebra de linha apenas se houver mais itens
@@ -90,8 +90,8 @@ mongoose.connect(appData.api.databaseURL)
                     }
 
                     axios.post('https://onesignal.com/api/v1/notifications', data, { headers })
-                        .then((respon) => console.log("Notificação enviada com sucesso! - "+diasRestantesSelecionado))
-                        .catch((error) => console.error(diasRestantesSelecionado+' - Erro ao enviar notificação:', error.message))
+                        .then((respon) => console.log("Notificação enviada com sucesso! - " + diasRestantesSelecionado))
+                        .catch((error) => console.error(diasRestantesSelecionado + ' - Erro ao enviar notificação:', error.message))
 
                     const milliseconds = Date.now()
                     const days = milliseconds / (24 * 60 * 60 * 1000)
@@ -110,29 +110,27 @@ mongoose.connect(appData.api.databaseURL)
 
             }
 
-            async function startNotifications() {
-                setInterval(async () => {
-                    let formattedDate  = new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' })
-                    let dateNow = new Date(formattedDate)
-                    //dateNow.setHours(4)
-                    let horas = dateNow.getHours()
-                    let minutos = dateNow.getMinutes()
-                    console.log(`HORAS: ${horas}:${minutos}`)
-    
-                    //sendNotification(0)
-    
-                    if (horas ===  4) sendNotification(0) // 04h
-    
-                    if (horas === 13) sendNotification(1) // 13h
-                    if (horas === 14) sendNotification(2) // 14h
-                    if (horas === 15) sendNotification(3) // 15h
-                    if (horas === 16) sendNotification(4) // 16h
-                    if (horas === 17) sendNotification(5) // 17h
-                    if (horas === 18) sendNotification(6) // 18h
-                    if (horas === 19) sendNotification(7) // 10h
-                    if (horas === 20) sendNotification(10)// 20h
-    
-                }, 1000*60*60)
+            function startNotifications() {
+                let formattedDate = new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' })
+                let dateNow = new Date(formattedDate)
+                //dateNow.setHours(4)
+                let horas = dateNow.getHours()
+                let minutos = dateNow.getMinutes()
+                console.log(`HORAS: ${horas}:${minutos}`)
+
+                //sendNotification(0)
+
+                if (horas === 4) sendNotification(0) // 04h
+
+                if (horas === 13) sendNotification(1) // 13h
+                if (horas === 14) sendNotification(2) // 14h
+                if (horas === 15) sendNotification(3) // 15h
+                if (horas === 16) sendNotification(4) // 16h
+                if (horas === 17) sendNotification(5) // 17h
+                if (horas === 18) sendNotification(6) // 18h
+                if (horas === 19) sendNotification(7) // 10h
+                if (horas === 20) sendNotification(10)// 20h
+
             }
 
             //  FAZER: Nas notificações da restando mais de 0 dias, as tarefas que o user ja marcou
