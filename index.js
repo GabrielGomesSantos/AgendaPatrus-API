@@ -117,22 +117,22 @@ mongoose.connect(appData.api.databaseURL)
                 //dateNow.setHours(4)
                 let horas = dateNow.getHours()
                 let minutos = dateNow.getMinutes()
-                //console.log(`HORAS: ${horas}:${minutos}`)
+                console.log(`HORAS: ${horas}:${minutos}`)
 
                 //sendNotification(0)
 
-                if (horas === 4 && minutos < 3) sendNotification(0) // 04h
+                if (horas ===  4) sendNotification(0) // 04h
 
-                if (horas === 13 && minutos < 3) sendNotification(1) // 13h
-                if (horas === 14 && minutos < 3) sendNotification(2) // 14h
-                if (horas === 15 && minutos < 3) sendNotification(3) // 15h
-                if (horas === 16 && minutos < 3) sendNotification(4) // 16h
-                if (horas === 17 && minutos < 3) sendNotification(5) // 17h
-                if (horas === 18 && minutos < 3) sendNotification(6) // 18h
-                if (horas === 19 && minutos < 3) sendNotification(7) // 10h
-                if (horas === 20 && minutos < 3) sendNotification(10)// 20h
+                if (horas === 13) sendNotification(1) // 13h
+                if (horas === 14) sendNotification(2) // 14h
+                if (horas === 15) sendNotification(3) // 15h
+                if (horas === 16) sendNotification(4) // 16h
+                if (horas === 17) sendNotification(5) // 17h
+                if (horas === 18) sendNotification(6) // 18h
+                if (horas === 19) sendNotification(7) // 10h
+                if (horas === 20) sendNotification(10)// 20h
 
-            }, 20000)
+            }, 1000*60*60)
 
             //  FAZER: Nas notificações da restando mais de 0 dias, as tarefas que o user ja marcou
             //      como feito não será incluso em "text"
