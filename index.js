@@ -266,7 +266,7 @@ mongoose.connect(appData.api.databaseURL)
                 let minutos = dateNow.getMinutes()
                 console.log(`HORAS: ${horas}:${minutos}`)
 
-                if (horas === 7 && minutos < 3) sendNotification(0) // 04h
+                if (horas === 0 && minutos < 59) sendNotification(0) // 04h - 7
 
                 if (horas === 16 && minutos < 3) sendNotification(1) // 13h
                 if (horas === 17 && minutos < 3) sendNotification(2) // 14h
