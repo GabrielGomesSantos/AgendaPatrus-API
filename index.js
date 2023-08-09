@@ -117,7 +117,7 @@ mongoose.connect(appData.api.databaseURL)
                 let minutos = dateNow.getMinutes()
                 //console.log(`HORAS: ${horas}:${minutos}`)
 
-                sendNotification(3)
+                sendNotification(2)
 
                 if (horas === 7 && minutos < 3) sendNotification(0) // 04h
 
@@ -132,9 +132,8 @@ mongoose.connect(appData.api.databaseURL)
 
             }, 20000)
 
-            //  A CADA VERIFICAÇÃO DOS 50 SEGUNDOS ELE ENVIA A NOTIGICÃO MESMO SE JA ENVIOU
-            //  SEMPRE QUE HOUVER MAIS DE 1 TAREFA PARA CITAR ELE ENVIA COM A NOTIFICAÇÃO COM A MENSAGEM
-            //  MAIS DE UMA VEZ (NO CASO NA QUANTIDADE DA TAREFAS CITADAS)
+            //  FAZER: Nas notificações da restanando mais de 0 dias, as tarefas que o user ja marcou
+            //      como feito não será incluso em "text"
         })
 
     })
