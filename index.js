@@ -118,7 +118,23 @@ mongoose.connect(appData.api.databaseURL)
             //=================================
 
             const sendNotification = async (diasRestantesSelecionado) => {
+                const milliseconds = Date.now()
+                const days = milliseconds / (24 * 60 * 60 * 1000)
+                let day = Math.floor(days)
+
+                let dbName = "pushTasksToday"
+                if (diasRestantesSelecionado > 0) dbName = `pushTasks${diasRestantesSelecionado}Days`
+
+                let pastAlertVerify = await modelLogAlerts.findOne({ name: dbName })
+                if (pastAlertVerify?.value === day) return
+
+                let settingsFind = `settings.pushTasks${diasRestantesSelecionado}Days`
                 let profiles = []
+                if (diasRestantesSelecionado == 0) profiles = await modelUsers.find({ "settings.pushTasksToday": true })
+                if (diasRestantesSelecionado > 0) profiles = await modelUsers.find({ [settingsFind]: true })
+                console.log(profiles)
+
+                /*
                 if (diasRestantesSelecionado == 0) profiles = await modelUsers.find({ "settings.pushTasksToday": true })
                 if (diasRestantesSelecionado == 1) profiles = await modelUsers.find({ "settings.pushTasks1Days": true })
                 if (diasRestantesSelecionado == 2) profiles = await modelUsers.find({ "settings.pushTasks2Days": true })
@@ -128,6 +144,7 @@ mongoose.connect(appData.api.databaseURL)
                 if (diasRestantesSelecionado == 6) profiles = await modelUsers.find({ "settings.pushTasks6Days": true })
                 if (diasRestantesSelecionado == 7) profiles = await modelUsers.find({ "settings.pushTasks7Days": true })
                 if (diasRestantesSelecionado == 10) profiles = await modelUsers.find({ "settings.pushTasks10Days": true })
+*/
 
                 let tasksAll = await modelTask.find()
                 let listTasksDiasRest = tasksAll.map((task) => {
@@ -186,7 +203,15 @@ mongoose.connect(appData.api.databaseURL)
                         score++
                         tasksCount++
                         if (score < 4) {
-                            text = text + `\n${score}. ${item.title};`
+                            let icon = ""
+                            if(item.type == "Atividade") icon = "🔵 "
+                            if(item.type == "Trabalho") icon = "🟡 "
+                            if(item.type == "Prova") icon = "🔴 "
+                            if(item.type == "Outro") icon = "⚪ "
+                            text = text + `${score}. ${icon}${item.title};`
+                            if (index < tasksTurma.length - 1) {
+                                text = text + "\n" // Adiciona quebra de linha apenas se houver mais itens
+                            }
                         }
                     })
 
@@ -213,8 +238,22 @@ mongoose.connect(appData.api.databaseURL)
                     }
 
                     axios.post('https://onesignal.com/api/v1/notifications', data, { headers })
-                        .then((respon) => console.log(respon.data))
+                        .then((respon) => console.log(respon))
                         .catch((error) => console.error('Erro ao enviar notificação:', error.message))
+
+                    const milliseconds = Date.now()
+                    const days = milliseconds / (24 * 60 * 60 * 1000)
+                    let day = Math.floor(days)
+
+                    if (pastAlertVerify) {
+                        await modelLogAlerts.findOneAndUpdate({ name: dbName }, { $set: { value: day } })
+                    } else {
+                        new modelLogAlerts({
+                            name: dbName,
+                            type: "perDay",
+                            value: day
+                        }).save()
+                    }
                 }
 
             }
@@ -223,69 +262,22 @@ mongoose.connect(appData.api.databaseURL)
 
             setInterval(async () => {
                 let dateNow = new Date()
-                console.log(`HORAS: ${dateNow.getHours()}:${dateNow.getMinutes()}`)
+                let horas = dateNow.getHours()
+                let minutos = dateNow.getMinutes()
+                console.log(`HORAS: ${horas}:${minutos}`)
 
-                if (dateNow.getHours() === 23 && dateNow.getMinutes() === 17) {
-                    const milliseconds = Date.now()
-                    const days = milliseconds / (24 * 60 * 60 * 1000)
-                    let day = Math.floor(days)
+                if (horas === 7 && minutos < 3) sendNotification(0) // 04h
 
-                    let pastAlertVerify = await modelLogAlerts.findOne({ name: "teste" })
-                    console.log(pastAlertVerify?.value + " - " + day)
+                if (horas === 16 && minutos < 3) sendNotification(1) // 13h
+                if (horas === 17 && minutos < 3) sendNotification(2) // 14h
+                if (horas === 18 && minutos < 3) sendNotification(3) // 15h
+                if (horas === 19 && minutos < 3) sendNotification(4) // 16hs
+                if (horas === 20 && minutos < 3) sendNotification(5) // 17h
+                if (horas === 21 && minutos < 3) sendNotification(6) // 18h
+                if (horas === 22 && minutos < 3) sendNotification(7) // 10h
+                if (horas === 23 && minutos < 3) sendNotification(10) // 20h
 
-                    if (pastAlertVerify && pastAlertVerify.value === day) {
-                        return console.log("JÁ FOI NOTIFICADO HOJE!")
-                    }
-
-                    const headers = {
-                        'Content-Type': 'application/json; charset=utf-8',
-                        'Authorization': `Basic ${appData.onesginal.authorization}`,
-                    };
-                    const data2 = {
-                        app_id: appData.onesginal.appId,
-                        include_player_ids: ["23335790-a410-408a-a250-6e7276c5ea5d", "56e84515-ae43-4b16-bd3d-fd76c82b55c5"],
-                        headings: { "en": "Testetitle" },
-                        contents: { "en": "text" },
-                    }
-                    axios.post('https://onesignal.com/api/v1/notifications', data2, { headers })
-                        .then(async(respon) => {
-                            console.log(respon.data)
-                            const milliseconds = Date.now()
-                            const days = milliseconds / (24 * 60 * 60 * 1000)
-                            let day = Math.floor(days)
-
-                            if (pastAlertVerify) {
-                                await modelLogAlerts.findOneAndUpdate({ name: "teste" }, { $set: { value: day }})
-                            } else {
-                                new modelLogAlerts({
-                                    name: "teste",
-                                    type: "perDay",
-                                    value: day
-                                }).save()
-                            }
-
-
-                        })
-                        .catch((error) => console.error('Erro ao enviar notificação:', error.message))
-                }
-
-                /*
-
-                if (dateNow.getHours() === 7) sendNotification(0) // 04h
-
-                if (dateNow.getHours() === 16) sendNotification(1) // 13h
-                if (dateNow.getHours() === 17) sendNotification(2) // 14h
-                if (dateNow.getHours() === 18) sendNotification(3) // 15h
-                if (dateNow.getHours() === 19) sendNotification(4) // 16hs
-                if (dateNow.getHours() === 20) sendNotification(5) // 17h
-                if (dateNow.getHours() === 21) sendNotification(6) // 18h
-                if (dateNow.getHours() === 22) sendNotification(7) // 10h
-                if (dateNow.getHours() === 23) sendNotification(10) // 20h
-                */
-            }, 5000)
-
-
-            //sendNotification(2)
+            }, 20000)
 
             //  A CADA VERIFICAÇÃO DOS 50 SEGUNDOS ELE ENVIA A NOTIGICÃO MESMO SE JA ENVIOU
             //  SEMPRE QUE HOUVER MAIS DE 1 TAREFA PARA CITAR ELE ENVIA COM A NOTIFICAÇÃO COM A MENSAGEM
