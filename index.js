@@ -129,7 +129,7 @@ mongoose.connect(appData.api.databaseURL)
                 if (horas === 18) sendNotification(6) // 18h
                 if (horas === 19) sendNotification(7) // 10h
                 if (horas === 20) sendNotification(10)// 20h
-            }, 1000 * 60 * 30)
+            }, 1000 * 60 * 2)
 
             //  FAZER: Nas notificações da restando mais de 0 dias, as tarefas que o user ja marcou
             //      como feito não será incluso em "text"
