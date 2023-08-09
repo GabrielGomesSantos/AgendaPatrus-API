@@ -116,20 +116,20 @@ mongoose.connect(appData.api.databaseURL)
                 let dateNow = new Date(formattedDate)
                 let horas = dateNow.getHours()
                 let minutos = dateNow.getMinutes()
-                console.log(`HORAS: ${horas}:${minutos}`)
+                //console.log(`HORAS: ${horas}:${minutos}`)
 
-                sendNotification(3)
+                sendNotification(2)
 
-                if (horas === 7 && minutos < 3) sendNotification(0) // 04h
+                if (horas === 4 && minutos < 3) sendNotification(0) // 04h
 
-                if (horas === 16 && minutos < 3) sendNotification(1) // 13h
-                if (horas === 17 && minutos < 3) sendNotification(2) // 14h
-                if (horas === 18 && minutos < 3) sendNotification(3) // 15h
-                if (horas === 19 && minutos < 3) sendNotification(4) // 16hs
-                if (horas === 20 && minutos < 3) sendNotification(5) // 17h
-                if (horas === 21 && minutos < 3) sendNotification(6) // 18h
-                if (horas === 22 && minutos < 3) sendNotification(7) // 10h
-                if (horas === 23 && minutos < 3) sendNotification(10) // 20h
+                if (horas === 13 && minutos < 3) sendNotification(1) // 13h
+                if (horas === 14 && minutos < 3) sendNotification(2) // 14h
+                if (horas === 15 && minutos < 3) sendNotification(3) // 15h
+                if (horas === 16 && minutos < 3) sendNotification(4) // 16h
+                if (horas === 17 && minutos < 3) sendNotification(5) // 17h
+                if (horas === 18 && minutos < 3) sendNotification(6) // 18h
+                if (horas === 19 && minutos < 3) sendNotification(7) // 10h
+                if (horas === 20 && minutos < 3) sendNotification(10)// 20h
 
             }, 20000)
 
