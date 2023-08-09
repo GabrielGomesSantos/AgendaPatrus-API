@@ -118,8 +118,6 @@ mongoose.connect(appData.api.databaseURL)
                 let minutos = dateNow.getMinutes()
                 //console.log(`HORAS: ${horas}:${minutos}`)
 
-                sendNotification(2)
-
                 if (horas === 4 && minutos < 3) sendNotification(0) // 04h
 
                 if (horas === 13 && minutos < 3) sendNotification(1) // 13h
@@ -133,7 +131,7 @@ mongoose.connect(appData.api.databaseURL)
 
             }, 20000)
 
-            //  FAZER: Nas notificações da restanando mais de 0 dias, as tarefas que o user ja marcou
+            //  FAZER: Nas notificações da restando mais de 0 dias, as tarefas que o user ja marcou
             //      como feito não será incluso em "text"
         })
 
