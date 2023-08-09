@@ -14,109 +14,6 @@ mongoose.connect(appData.api.databaseURL)
         api.listen(4000, async () => {
             console.log("🟢 | API ligada com sucesso!")
 
-
-
-            /*
-            setInterval(async () => {
-                async function sendNotificationOneSignal(dataPush) {
-                    try {
-
-
-                        const headers = {
-                            'Content-Type': 'application/json; charset=utf-8',
-                            Authorization: `Basic ${appData.onesginal.authorization}`,
-                        };
-
-                        const data = {
-                            app_id: appData.onesginal.appId,
-                            include_player_ids: [],
-                            headings: { "en": "Teste" },
-                            contents: { "en": "DESCRIÇÃO" },
-                        }
-
-                        const response = await axios.post('https://onesignal.com/api/v1/notifications', data, { headers });
-                        console.log('Notificação enviada com sucesso!');
-                        console.log(response.data);
-                    } catch (error) {
-                        console.error('Erro ao enviar notificação:', error.message);
-                    }
-                }
-
-                let items = await modelTask.find()
-                let dateNow = new Date()
-                if (dateNow.getHours() === 7) { // 7 | UTC+3
-                    const milliseconds = Date.now()
-                    const days = milliseconds / (24 * 60 * 60 * 1000)
-                    let day = Math.floor(days)
-
-                    let dayInDatabase = await modelLogAlerts.findOne()
-                    if (!dayInDatabase) dayInDatabase = { day: day - 1 }
-
-                    if (day > dayInDatabase.day) {
-                        console.log("Avisando sobre as tarefas de hoje---")
-                        let text = ""
-                        let score = 0
-                        let tasksCount = 0
-
-                        items.map((item) => {
-                            let dias = Math.ceil((item.date - Date.now()) / (24 * 60 * 60 * 1000))
-
-                            if (dias === 0) {
-                                score++
-                                tasksCount++
-                                if (score < 4) {
-                                    text = text + `${score}. ${item.title};\n`
-                                }
-
-                            }
-                        })
-
-                        if (tasksCount > 3) {
-                            let newCount = tasksCount - 3
-                            text = text + `E ${newCount > 1 ? "outras" : "outra"} ${newCount} ${newCount > 1 ? "tarefas" : "tarefa"}...`
-                        }
-
-                        const dataPush = {
-                            app_id: appData.onesginal.appId,
-                            included_segments: ['All'],
-                            headings: { 'en': `🗓️ Tarefas para hoje` },
-                            contents: { 'en': text },
-                        }
-
-                        sendNotification(dataPush)
-                        let dataUpdateDay = { day }
-
-                        dayInDatabase.day = day
-                        dayInDatabase.save()
-                            .then(() => {
-                                let dataResp = {
-                                    day,
-                                    status: 200
-                                }
-
-                                console.log(dataResp)
-                            })
-                            .catch(err => {
-                                let dataResp = {
-                                    day,
-                                    status: 400,
-                                    erro: err
-                                }
-
-                                return console.log(dataResp)
-                            })
-
-
-                    } else {
-                        console.log("Já foi avisado hoje!")
-                    }
-                }
-
-            }, 50000)
-            */
-
-            //=================================
-
             const sendNotification = async (diasRestantesSelecionado) => {
                 const milliseconds = Date.now()
                 const days = milliseconds / (24 * 60 * 60 * 1000)
@@ -142,45 +39,10 @@ mongoose.connect(appData.api.databaseURL)
                 let tasksComDoc = listTasksDiasRest.filter(task => task.diasRest == diasRestantesSelecionado)
                 let tasks = tasksComDoc.map(task => task._doc)
 
-                /*
-                let listPlayerIds = []
-                profiles.map(async (profile) => {
-                    let device = await modelDevices.findOne({ email: profile.email })
-                    listPlayerIds.push(device)
-                })
-                console.log(listPlayerIds)
-                */
-
-                /*
-                let devices = await modelDevices.find()
-                let emails = profiles.map(profile => profile.email)
-                let devicesUses = devices.filter(device => device.email)
-                let profilesAll = profiles.map(profile => )
-                console.log(profilesAll)
-                */
-
-                /*
-                const headers = {
-                    'Content-Type': 'application/json; charset=utf-8',
-                    'Authorization': `Basic ${appData.onesginal.authorization}`,
-                };
-                const data2 = {
-                    app_id: appData.onesginal.appId,
-                    include_player_ids: ["23335790-a410-408a-a250-6e7276c5ea5d", "56e84515-ae43-4b16-bd3d-fd76c82b55c5"],
-                    headings: { "en": "Testetitle" },
-                    contents: { "en": "text" },
-                }
-                axios.post('https://onesignal.com/api/v1/notifications', data2, { headers })
-                    .then((respon) => console.log(respon.data))
-                    .catch((error) => console.error('Erro ao enviar notificação:', error.message))
-                    */
-
                 for (const profile of profiles) {
-                    console.log("PASSANDO POR FUNÇÃO A ENVIAR UMA NOTIFICAÇÃO")
                     let tasksTurma = tasks.filter(task => task.turma === profile.turma)
                     let device = await modelDevices.findOne({ email: profile.email })
                     let playerId = device?.userId
-                    console.log("ENVIANDO PARA: " + playerId)
 
                     let text = ""
                     let score = 0
@@ -207,7 +69,7 @@ mongoose.connect(appData.api.databaseURL)
                         text = text + `E ${newCount > 1 ? "outras" : "outra"} ${newCount} ${newCount > 1 ? "tarefas" : "tarefa"}...`
                     }
 
-                    let headText = "🗓️ Tarefas para hoje"
+                    let headText = "⏰ Tarefas para hoje"
                     if (diasRestantesSelecionado != 0) {
                         headText = `🗓️ Tarefas para daqui ${diasRestantesSelecionado} ${diasRestantesSelecionado <= 1 ? "dia" : "dias"}`
                     }
@@ -225,8 +87,8 @@ mongoose.connect(appData.api.databaseURL)
                     }
 
                     axios.post('https://onesignal.com/api/v1/notifications', data, { headers })
-                        .then((respon) => console.log(respon))
-                        .catch((error) => console.error('Erro ao enviar notificação:', error.message))
+                        .then((respon) => console.log("Notificação enviada com sucesso! - "+diasRestantesSelecionado))
+                        .catch((error) => console.error(diasRestantesSelecionado+' - Erro ao enviar notificação:', error.message))
 
                     const milliseconds = Date.now()
                     const days = milliseconds / (24 * 60 * 60 * 1000)
@@ -251,9 +113,11 @@ mongoose.connect(appData.api.databaseURL)
                 let dateNow = new Date()
                 let horas = dateNow.getHours()
                 let minutos = dateNow.getMinutes()
-                console.log(`HORAS: ${horas}:${minutos}`)
+                //console.log(`HORAS: ${horas}:${minutos}`)
 
-                if (horas === 0 && minutos < 59) sendNotification(0) // 04h - 7
+                sendNotification(3)
+
+                if (horas === 7 && minutos < 3) sendNotification(0) // 04h
 
                 if (horas === 16 && minutos < 3) sendNotification(1) // 13h
                 if (horas === 17 && minutos < 3) sendNotification(2) // 14h
@@ -529,7 +393,6 @@ api.put("/tasks", async (req, res) => {
 // |||||====||||| usuarios |||||====|||||
 api.get("/users/verify", async (req, res) => {
     let userData = req.body
-    console.log(userData)
 
     if (!userData) {
         return res.status(400).json({ message: "Nenhum dado para busca foi passado." })
@@ -542,7 +405,6 @@ api.get("/users/verify", async (req, res) => {
         ]
     });
     let userFind = usersFind[0] || null
-    //console.log(userFind)
 
     if (userFind) {
         return res.status(200).json({
