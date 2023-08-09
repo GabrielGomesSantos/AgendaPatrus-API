@@ -112,7 +112,8 @@ mongoose.connect(appData.api.databaseURL)
 
 
             setInterval(async () => {
-                let dateNow = new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' })
+                let formattedDate  = new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' })
+                let dateNow = new Date(formattedDate)
                 let horas = dateNow.getHours()
                 let minutos = dateNow.getMinutes()
                 console.log(`HORAS: ${horas}:${minutos}`)
