@@ -13,7 +13,6 @@ mongoose.connect(appData.api.databaseURL)
         console.log("🟢 | MongoDB conectada com sucesso!")
         api.listen(4000, async () => {
             console.log("🟢 | API ligada com sucesso!")
-            setInterval(startNotifications, 1000 * 60 * 30) // 60
 
             const sendNotification = async (diasRestantesSelecionado) => {
                 const milliseconds = Date.now()
@@ -110,7 +109,7 @@ mongoose.connect(appData.api.databaseURL)
 
             }
 
-            function startNotifications() {
+            setInterval(() => {
                 let formattedDate = new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' })
                 let dateNow = new Date(formattedDate)
                 //dateNow.setHours(4)
@@ -130,8 +129,7 @@ mongoose.connect(appData.api.databaseURL)
                 if (horas === 18) sendNotification(6) // 18h
                 if (horas === 19) sendNotification(7) // 10h
                 if (horas === 20) sendNotification(10)// 20h
-
-            }
+            }, 1000 * 60 * 30)
 
             //  FAZER: Nas notificações da restando mais de 0 dias, as tarefas que o user ja marcou
             //      como feito não será incluso em "text"
