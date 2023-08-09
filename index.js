@@ -44,6 +44,8 @@ mongoose.connect(appData.api.databaseURL)
                     let device = await modelDevices.findOne({ email: profile.email })
                     let playerId = device?.userId
 
+                    if(!tasksTurma[0]) return console.log(`Nenhuma tarefa para ${diasRestantesSelecionado} dias restantes | Nenhuma notificação enviada!`)
+
                     let text = ""
                     let score = 0
                     let tasksCount = 0
