@@ -13,7 +13,7 @@ mongoose.connect(appData.api.databaseURL)
         console.log("🟢 | MongoDB conectada com sucesso!")
         api.listen(4000, async () => {
             console.log("🟢 | API ligada com sucesso!")
-            setInterval(startNotifications, 1000 * 60 * 60)
+            setInterval(startNotifications, 1000 * 60 * 30) // 60
 
             const sendNotification = async (diasRestantesSelecionado) => {
                 const milliseconds = Date.now()
