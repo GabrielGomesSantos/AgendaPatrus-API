@@ -13,6 +13,7 @@ mongoose.connect(appData.api.databaseURL)
         console.log("🟢 | MongoDB conectada com sucesso!")
         api.listen(4000, async () => {
             console.log("🟢 | API ligada com sucesso!")
+            startNotifications()
 
             const sendNotification = async (diasRestantesSelecionado) => {
                 const milliseconds = Date.now()
@@ -109,30 +110,30 @@ mongoose.connect(appData.api.databaseURL)
 
             }
 
-
-
-            setInterval(async () => {
-                let formattedDate  = new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' })
-                let dateNow = new Date(formattedDate)
-                //dateNow.setHours(4)
-                let horas = dateNow.getHours()
-                let minutos = dateNow.getMinutes()
-                console.log(`HORAS: ${horas}:${minutos}`)
-
-                //sendNotification(0)
-
-                if (horas ===  4) sendNotification(0) // 04h
-
-                if (horas === 13) sendNotification(1) // 13h
-                if (horas === 14) sendNotification(2) // 14h
-                if (horas === 15) sendNotification(3) // 15h
-                if (horas === 16) sendNotification(4) // 16h
-                if (horas === 17) sendNotification(5) // 17h
-                if (horas === 18) sendNotification(6) // 18h
-                if (horas === 19) sendNotification(7) // 10h
-                if (horas === 20) sendNotification(10)// 20h
-
-            }, 1000*60*60)
+            async function startNotifications() {
+                setInterval(async () => {
+                    let formattedDate  = new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' })
+                    let dateNow = new Date(formattedDate)
+                    //dateNow.setHours(4)
+                    let horas = dateNow.getHours()
+                    let minutos = dateNow.getMinutes()
+                    console.log(`HORAS: ${horas}:${minutos}`)
+    
+                    //sendNotification(0)
+    
+                    if (horas ===  4) sendNotification(0) // 04h
+    
+                    if (horas === 13) sendNotification(1) // 13h
+                    if (horas === 14) sendNotification(2) // 14h
+                    if (horas === 15) sendNotification(3) // 15h
+                    if (horas === 16) sendNotification(4) // 16h
+                    if (horas === 17) sendNotification(5) // 17h
+                    if (horas === 18) sendNotification(6) // 18h
+                    if (horas === 19) sendNotification(7) // 10h
+                    if (horas === 20) sendNotification(10)// 20h
+    
+                }, 1000*60*60)
+            }
 
             //  FAZER: Nas notificações da restando mais de 0 dias, as tarefas que o user ja marcou
             //      como feito não será incluso em "text"
