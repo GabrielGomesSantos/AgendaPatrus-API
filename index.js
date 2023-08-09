@@ -114,11 +114,12 @@ mongoose.connect(appData.api.databaseURL)
             setInterval(async () => {
                 let formattedDate  = new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' })
                 let dateNow = new Date(formattedDate)
+                dateNow.setHours(4)
                 let horas = dateNow.getHours()
                 let minutos = dateNow.getMinutes()
-                //console.log(`HORAS: ${horas}:${minutos}`)
+                console.log(`HORAS: ${horas}:${minutos}`)
 
-                sendNotification(0)
+                //sendNotification(0)
 
                 if (horas === 4 && minutos < 3) sendNotification(0) // 04h
 
