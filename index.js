@@ -48,10 +48,6 @@ mongoose.connect(appData.api.databaseURL)
                 let tasks = tasksComDoc.map(task => task._doc)
                 
                 profiles.map(async (profile) => {
-                    console.log(profile)
-                    tasks.map((task) => {
-                        console.log(task.turma + " === " + profile.turma)
-                    })
                     let tasksTurma = tasks.filter(task => task.turma === profile.turma)
                     let device = await modelDevices.findOne({ email: profile.email })
                     let playerId = device?.userId
@@ -132,7 +128,7 @@ mongoose.connect(appData.api.databaseURL)
                 let minutos = dateNow.getMinutes()
                 console.log(`HORAS: ${horas}:${minutos}`)
 
-                sendNotification(0)
+                //sendNotification(0)
 
                 if (horas === 4) sendNotification(0) // 04h
 
@@ -142,7 +138,7 @@ mongoose.connect(appData.api.databaseURL)
                 if (horas === 16) sendNotification(4) // 16h
                 if (horas === 17) sendNotification(5) // 17h
                 if (horas === 18) sendNotification(6) // 18h
-                if (horas === 19) sendNotification(7) // 10h
+                if (horas === 19) sendNotification(7) // 19h
                 if (horas === 20) sendNotification(10)// 20h
             }, 1000 * 60 * 2)
 
