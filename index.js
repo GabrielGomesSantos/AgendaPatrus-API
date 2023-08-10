@@ -46,12 +46,14 @@ mongoose.connect(appData.api.databaseURL)
                 }
 
                 let tasks = tasksComDoc.map(task => task._doc)
-                console.log(tasks)
+                
 
                 for (const profile of profiles) {
+                    console.log(tasks[0]?.turma + " == "+profile.turma)
                     let tasksTurma = tasks.filter(task => task.turma === profile.turma)
                     let device = await modelDevices.findOne({ email: profile.email })
                     let playerId = device?.userId
+                    console.log(tasksTurma)
 
                     if (!tasksTurma[0]) return console.log(`Nenhuma tarefa para ${diasRestantesSelecionado} dias restantes | Nenhuma notificação enviada!`)
 
