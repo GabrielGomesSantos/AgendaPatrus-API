@@ -36,8 +36,12 @@ mongoose.connect(appData.api.databaseURL)
                     return { ...task, diasRest: diasCalculados }
                 });
 
+                console.log(listTasksDiasRest)
+
                 let tasksComDoc = listTasksDiasRest.filter(task => task.diasRest == diasRestantesSelecionado)
                 let tasks = tasksComDoc.map(task => task._doc)
+
+                
 
                 for (const profile of profiles) {
                     let tasksTurma = tasks.filter(task => task.turma === profile.turma)
@@ -270,7 +274,7 @@ const modelDevices = mongoose.model("Device", schemaDevices)
 // -------------------------------------------------------------
 
 api.get("/", async (req, res) => {
-    console.log("RESET foi chamado")
+    //console.log("RESET foi chamado")
     
     return res.status(200).json({ result: "Sucess" })
 })
