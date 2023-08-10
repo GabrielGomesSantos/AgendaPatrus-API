@@ -46,9 +46,9 @@ mongoose.connect(appData.api.databaseURL)
                 }
 
                 let tasks = tasksComDoc.map(task => task._doc)
-                console.log(profiles)
                 
-                for (const profile of profiles) {
+                profiles.map(async (profile) => {
+                    console.log(profile)
                     tasks.map((task) => {
                         console.log(task.turma + " === " + profile.turma)
                     })
@@ -118,7 +118,7 @@ mongoose.connect(appData.api.databaseURL)
                             value: day
                         }).save()
                     }
-                }
+                })
 
             }
 
