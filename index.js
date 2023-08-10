@@ -47,9 +47,9 @@ mongoose.connect(appData.api.databaseURL)
 
                 let tasks = tasksComDoc.map(task => task._doc)
                 
-
+                console.log(tasks[0])
                 for (const profile of profiles) {
-                    console.log(tasks[0]?.turma + " == "+profile.turma)
+                    console.log(tasks[0])
                     let tasksTurma = tasks.filter(task => task.turma === profile.turma)
                     let device = await modelDevices.findOne({ email: profile.email })
                     let playerId = device?.userId
