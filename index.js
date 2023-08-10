@@ -110,6 +110,8 @@ mongoose.connect(appData.api.databaseURL)
             }
 
             setInterval(() => {
+                axios.get(appData.api.url+"/")
+
                 let formattedDate = new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' })
                 let dateNow = new Date(formattedDate)
                 //dateNow.setHours(4)
@@ -268,6 +270,8 @@ const modelDevices = mongoose.model("Device", schemaDevices)
 // -------------------------------------------------------------
 
 api.get("/", async (req, res) => {
+    console.log("RESET foi chamado")
+    
     return res.status(200).json({ result: "Sucess" })
 })
 
