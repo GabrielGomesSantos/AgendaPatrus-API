@@ -455,6 +455,13 @@ api.get("/users", async (req, res) => {
     }
 
 })
+api.get("/users/several", async (req, res) => {
+    let data = req.body?.params
+
+    await modelUsers.find({ data })
+        .then((data) => { res.status(200).json(data) })
+        .catch((err) => { res.status(400).json(err) })
+})
 
 api.post("/users", async (req, res) => {
     let userData = req.body?.params
@@ -483,8 +490,8 @@ api.put("/users", async (req, res) => {
     let data = req.body?.params.dataPass
 
     await modelUsers.findOneAndUpdate({ _id: data._id }, { $set: data })
-    .then((data) => { res.status(200).json(data) })
-    .catch((err) => { res.status(400).json(err) })
+        .then((data) => { res.status(200).json(data) })
+        .catch((err) => { res.status(400).json(err) })
 })
 // |||||====||||| -------- |||||====|||||
 
