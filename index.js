@@ -189,6 +189,10 @@ var schemaUsers = new mongoose.Schema({
     password: String,
     turma: String,
     settings: {
+        pushTasksCreated: {
+            type: Boolean,
+            default: false
+        },
         pushTasksToday: {
             type: Boolean,
             default: true
@@ -473,6 +477,14 @@ api.post("/users", async (req, res) => {
         .then((data) => { return res.status(200).json(data) })
         .catch((err) => { return res.status(400).json(err) })
 
+})
+
+api.put("/users", async (req, res) => {
+    let data = req.body?.params
+
+    await modelUsers.findOneAndUpdate({ _id: data._id }, { $set: data })
+    .then((data) => { res.status(200).json(data) })
+    .catch((err) => { res.status(400).json(err) })
 })
 // |||||====||||| -------- |||||====|||||
 
