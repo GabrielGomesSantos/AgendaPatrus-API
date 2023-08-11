@@ -137,11 +137,14 @@ mongoose.connect(appData.api.databaseURL)
                         if (horas === 15) sendNotification(3) // 15h
                         if (horas === 16) sendNotification(4) // 16h
                         if (horas === 17) sendNotification(5) // 17h
-                        if (horas === 18) sendNotification(6) // 18hs
+                        if (horas === 18) sendNotification(6) // 18h
                         if (horas === 19) sendNotification(7) // 19h
                         if (horas === 20) sendNotification(10)// 20h
                     })
-                    .catch((err) => {console.log("Ocorreu um erro ao chamar RESET! Nada foi feito.")})
+                    .catch((err) => {
+                        console.log("Ocorreu um erro ao chamar RESET! Nada foi feito.")
+                        console.log(err)
+                    })
             }, 1000 * 60 * 2)
 
             //  FAZER: Nas notificações da restando mais de 0 dias, as tarefas que o user ja marcou
