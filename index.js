@@ -480,7 +480,7 @@ api.post("/users", async (req, res) => {
 })
 
 api.put("/users", async (req, res) => {
-    let data = req.body?.params
+    let data = req.body?.params.dataPass
     console.log(data)
 
     await modelUsers.findOneAndUpdate({ _id: data._id }, { $set: data })
