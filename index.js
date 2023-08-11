@@ -36,22 +36,22 @@ mongoose.connect(appData.api.databaseURL)
                     return { ...task, diasRest: diasCalculados }
                 });
 
-                
+
 
                 let tasksComDoc = []
-                if(diasRestantesSelecionado == 0) {
+                if (diasRestantesSelecionado == 0) {
                     tasksComDoc = listTasksDiasRest.filter(task => task.diasRest == 0 || task.diasRest == -0)
                 } else {
                     tasksComDoc = listTasksDiasRest.filter(task => task.diasRest == diasRestantesSelecionado)
                 }
 
                 let tasks = tasksComDoc.map(task => task._doc)
-                
+
                 profiles.map(async (profile) => {
                     let tasksTurma = tasks.filter(task => task.turma === profile.turma)
                     let device = await modelDevices.findOne({ email: profile.email })
                     let playerId = device?.userId
-                    
+
 
                     if (!tasksTurma[0]) return console.log(`Nenhuma tarefa para ${diasRestantesSelecionado} dias restantes | Nenhuma notificação enviada!`)
 
@@ -118,28 +118,30 @@ mongoose.connect(appData.api.databaseURL)
 
             }
 
-            setInterval(() => {
-                axios.get(appData.api.url+"/")
+            setInterval(async () => {
+                axios.post(appData.api.url + "/")
+                    .then(() => {
+                        let formattedDate = new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' })
+                        let dateNow = new Date(formattedDate)
+                        //dateNow.setHours(4)
+                        let horas = dateNow.getHours()
+                        let minutos = dateNow.getMinutes()
+                        console.log(`HORAS: ${horas}:${minutos}`)
 
-                let formattedDate = new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' })
-                let dateNow = new Date(formattedDate)
-                //dateNow.setHours(4)
-                let horas = dateNow.getHours()
-                let minutos = dateNow.getMinutes()
-                console.log(`HORAS: ${horas}:${minutos}`)
+                        //sendNotification(0)
 
-                //sendNotification(0)
+                        if (horas === 4) sendNotification(0) // 04h
 
-                if (horas === 4) sendNotification(0) // 04h
-
-                if (horas === 13) sendNotification(1) // 13h
-                if (horas === 14) sendNotification(2) // 14h
-                if (horas === 15) sendNotification(3) // 15h
-                if (horas === 16) sendNotification(4) // 16h
-                if (horas === 17) sendNotification(5) // 17h
-                if (horas === 18) sendNotification(6) // 18h
-                if (horas === 19) sendNotification(7) // 19h
-                if (horas === 20) sendNotification(10)// 20h
+                        if (horas === 13) sendNotification(1) // 13h
+                        if (horas === 14) sendNotification(2) // 14h
+                        if (horas === 15) sendNotification(3) // 15h
+                        if (horas === 16) sendNotification(4) // 16h
+                        if (horas === 17) sendNotification(5) // 17h
+                        if (horas === 18) sendNotification(6) // 18hs
+                        if (horas === 19) sendNotification(7) // 19h
+                        if (horas === 20) sendNotification(10)// 20h
+                    })
+                    .catch((err) => {console.log("Ocorreu um erro ao chamar RESET! Nada foi feito.")})
             }, 1000 * 60 * 2)
 
             //  FAZER: Nas notificações da restando mais de 0 dias, as tarefas que o user ja marcou
@@ -280,7 +282,7 @@ const modelDevices = mongoose.model("Device", schemaDevices)
 
 api.get("/", async (req, res) => {
     //console.log("RESET foi chamado")
-    
+
     return res.status(200).json({ result: "Sucess" })
 })
 
