@@ -457,6 +457,7 @@ api.get("/users", async (req, res) => {
 })
 api.get("/users/several", async (req, res) => {
     let data = req.body?.params
+    console.log(data)
 
     await modelUsers.find({ data })
         .then((data) => { res.status(200).json(data) })
