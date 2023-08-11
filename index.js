@@ -456,9 +456,16 @@ api.get("/users", async (req, res) => {
 
 })
 api.get("/users/several", async (req, res) => {
-    let data = req.query
+    var contentFind = req.body
+    if (Object.keys(contentFind).length === 0) {
+        contentFind = req.query
+    }
+    if (contentFind?.params) {
+        contentFind = contentFind.params
+    }
+    console.log(contentFind)
 
-    await modelUsers.find({ data })
+    await modelUsers.find({ contentFind })
         .then((data) => { res.status(200).json(data) })
         .catch((err) => { res.status(400).json(err) })
 })
