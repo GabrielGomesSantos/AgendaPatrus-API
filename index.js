@@ -53,7 +53,7 @@ mongoose.connect(appData.api.databaseURL)
                     let playerId = device?.userId
 
 
-                    if (!tasksTurma[0]) return console.log(`Nenhuma tarefa para ${diasRestantesSelecionado} dias restantes | Nenhuma notificação enviada!`)
+                    if (!tasksTurma[0]) return console.log(`[📵] ${profile.turma} | Dias restantes: ${diasRestantesSelecionado} | ${profile.fullname} | Nenhuma tarefa para a turma.`)
 
                     let text = ""
                     let score = 0
@@ -98,8 +98,8 @@ mongoose.connect(appData.api.databaseURL)
                     }
 
                     axios.post('https://onesignal.com/api/v1/notifications', data, { headers })
-                        .then((respon) => console.log("Notificação enviada com sucesso! - " + diasRestantesSelecionado))
-                        .catch((error) => console.error(diasRestantesSelecionado + ' - Erro ao enviar notificação:', error.message))
+                        .then((respon) => console.log(`[🔔✅] ${profile.turma} | Dias restantes: ${diasRestantesSelecionado} | ${profile.fullname} | Notificação enviada com sucess.`))
+                        .catch((error) => console.error(`[🔔❌] ${profile.turma} | Dias restantes: ${diasRestantesSelecionado} | ${profile.fullname} | Erro ao enviar a notificação!`, error.message))
 
                     const milliseconds = Date.now()
                     const days = milliseconds / (24 * 60 * 60 * 1000)
@@ -463,7 +463,6 @@ api.get("/users/several", async (req, res) => {
     if (contentFind?.params) {
         contentFind = contentFind.params
     }
-    console.log(contentFind)
 
     await modelUsers.find(contentFind)
         .then((data) => { res.status(200).json(data) })
