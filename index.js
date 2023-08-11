@@ -456,8 +456,10 @@ api.get("/users", async (req, res) => {
 
 })
 api.get("/users/several", async (req, res) => {
-    let data = req.body?.params
+    let data = req.body
+    let data2 = req.query
     console.log(data)
+    console.log(data2)
 
     await modelUsers.find({ data })
         .then((data) => { res.status(200).json(data) })
