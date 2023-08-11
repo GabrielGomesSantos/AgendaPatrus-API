@@ -119,7 +119,7 @@ mongoose.connect(appData.api.databaseURL)
             }
 
             setInterval(async () => {
-                axios.post(appData.api.url + "/")
+                axios.get(appData.api.url + "/")
                     .then(() => {
                         let formattedDate = new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' })
                         let dateNow = new Date(formattedDate)
