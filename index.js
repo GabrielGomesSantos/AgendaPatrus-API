@@ -646,11 +646,11 @@ api.put("/devices", async (req, res) => {
 
 api.post("/crypto", async (req, res) => {
     var dataString = req.body.toCrypto
-    console.log(dataString)
 
     let key = "aaaaaaa"
 
-    let cryptoString = crypto.AES.encrypt(dataString, key)
+    let cryptoProcess = crypto.AES.encrypt(dataString, key)
+    let cryptoString = cryptoProcess.toString()
     console.log(cryptoString)
     return res.status(200).json({ cryptoString })
 })
