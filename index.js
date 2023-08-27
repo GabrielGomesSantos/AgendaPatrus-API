@@ -649,7 +649,7 @@ api.post("/crypto", async (req, res) => {
     let key = "aaaaaaa"
 
     let cryptoProcess = crypto.AES.encrypt(dataString, key)
-    let cryptoString = cryptoProcess.toString()
+    let cryptoString = cryptoProcess.toString(crypto.enc.Utf8)
     console.log(cryptoString)
     return res.status(200).json({ cryptoString })
 })
