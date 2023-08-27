@@ -4,6 +4,7 @@ const api = express()
 const bodyParser = require("body-parser")
 const mongoose = require("mongoose")
 const appData = require("./appData.json")
+const crypto = require("crypto-js")
 
 api.use(bodyParser.json());
 
@@ -98,7 +99,7 @@ mongoose.connect(appData.api.databaseURL)
                     }
 
                     axios.post('https://onesignal.com/api/v1/notifications', data, { headers })
-                        .then((respon) => console.log(`[🔔✅] ${profile.turma} | Dias restantes: ${diasRestantesSelecionado} | ${profile.fullname} | Notificação enviada com sucess.`))
+                        .then((respon) => console.log(`[🔔✅] ${profile.turma} | Dias restantes: ${diasRestantesSelecionado} | ${profile.fullname} | Notificação enviada com sucesso.`))
                         .catch((error) => console.error(`[🔔❌] ${profile.turma} | Dias restantes: ${diasRestantesSelecionado} | ${profile.fullname} | Erro ao enviar a notificação!`, error.message))
 
                     const milliseconds = Date.now()
@@ -126,7 +127,7 @@ mongoose.connect(appData.api.databaseURL)
                         //dateNow.setHours(4)
                         let horas = dateNow.getHours()
                         let minutos = dateNow.getMinutes()
-                        console.log(`HORAS: ${horas}:${minutos}`)
+                        console.log(`HORAS: ${horas}:${minutos} >================================================`)
 
                         //sendNotification(0)
 
@@ -601,7 +602,7 @@ api.delete("/markedtasks", async (req, res) => {
 
 // |||||====||||| ------------------ |||||====|||||
 
-// |||||====||||| tarefas concluídas |||||====|||||
+// |||||====||||| dispositivos |||||====|||||
 
 api.get("/devices", async (req, res) => {
     let resp = await modelDevices.find()
@@ -638,6 +639,18 @@ api.put("/devices", async (req, res) => {
 })
 
 // |||||====||||| ------------------ |||||====|||||
+
+// |||||====||||| cryptografia |||||====|||||
+
+api.post("/crypto", async (req, res) => {
+    var dataString = req.body
+    console.log(dataString)
+
+    var dataString = "abc"
+    let cryptoString = crypto.SHA256(dataString)
+    console.log(cryptoString)
+    return res.status(200).json({ cryptoString })
+})
 
 /*
 
