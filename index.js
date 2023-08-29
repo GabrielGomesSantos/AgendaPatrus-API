@@ -5,8 +5,6 @@ const bodyParser = require("body-parser")
 const mongoose = require("mongoose")
 const appData = require("./appData.json")
 const crypto = require("crypto-js")
-var AES = require("crypto-js/aes");
-var SHA256 = require("crypto-js/sha256");
 
 api.use(bodyParser.json());
 
@@ -656,6 +654,10 @@ api.post("/crypto", async (req, res) => {
 api.get("/crypto", async (req, res) => {
     var dataString = req.body.crypto
     let key = appData.cryptoKey
+
+    console.log(dataString)
+    console.log(req.body)
+    console.log(req.params)
 
     let cryptoProcess = crypto.AES.decrypt(dataString, key)
     let cryptoString = cryptoProcess.toString(crypto.enc.Utf8)
