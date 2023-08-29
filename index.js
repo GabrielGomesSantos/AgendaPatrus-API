@@ -652,11 +652,10 @@ api.post("/crypto", async (req, res) => {
 })
 
 api.get("/crypto", async (req, res) => {
-    var dataString = req.params.crypto
+    var dataString = req.query.crypto
     let key = appData.cryptoKey
 
-    //console.log(dataString)
-    console.log(req)
+    console.log(dataString)
 
     let cryptoProcess = crypto.AES.decrypt(dataString, key)
     let cryptoString = cryptoProcess.toString(crypto.enc.Utf8)
